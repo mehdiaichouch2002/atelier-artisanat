@@ -54,13 +54,15 @@ export interface UserRow {
   role: "owner" | "manager";
   active: boolean;
   locale: string;
+  isSuperAdmin: boolean;
   createdAt: Date;
 }
 
 export async function listUsers(tx: Tx): Promise<UserRow[]> {
   return tx<UserRow[]>`
-    select id, email, display_name as "displayName", role, active, locale, created_at as "createdAt"
-    from atelier.users order by role, display_name`;
+    select id, email, display_name as "displayName", role, active, locale, is_super_admin as "isSuperAdmin",
+           created_at as "createdAt"
+    from atelier.users order by is_super_admin desc, role, display_name`;
 }
 
 export async function createUser(

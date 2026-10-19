@@ -23,5 +23,6 @@ export default async function globalSetup() {
     await sql`insert into atelier.users (email, display_name, role, password_hash)
               values (${u.email}, ${u.name}, ${u.role}, ${await hashPassword(u.password)})`;
   }
+  await sql`update atelier.users set is_super_admin = true where email = ${OWNER.email}`;
   await sql.end();
 }

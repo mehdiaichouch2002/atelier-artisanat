@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { cache } from "react";
 import { db } from "@/lib/db";
-import { can, type Permission, type Role } from "./permissions";
+import { hasPermission, type Permission, type Role } from "./permissions";
 import { AppError } from "@/lib/errors";
 
 export const SESSION_COOKIE = "atelier_session";
@@ -16,6 +16,8 @@ export interface SessionUser {
   displayName: string;
   role: Role;
   locale: string;
+  /** The single account allowed to manage users. */
+  isSuperAdmin: boolean;
 }
 
 export function hashToken(token: string): string {
@@ -51,11 +53,18 @@ export const getSessionUser = cache(async (): Promise<SessionUser | null> => {
   const hash = await currentTokenHash();
   if (!hash) return null;
   const rows = await db()<
-    { id: string; email: string; display_name: string; role: Role; locale: string }[]
+    { id: string; email: string; display_name: string; role: Role; locale: string; is_super_admin: boolean }[]
   >`select * from atelier.auth_resolve_session(${hash}, ${SESSION_TTL_SECONDS})`;
   const u = rows[0];
   if (!u) return null;
-  return { id: u.id, email: u.email, displayName: u.display_name, role: u.role, locale: u.locale };
+  return {
+    id: u.id,
+    email: u.email,
+    displayName: u.display_name,
+    role: u.role,
+    locale: u.locale,
+    isSuperAdmin: u.is_super_admin === true,
+  };
 });
 
 /** For pages: redirects to /login when signed out. */
@@ -68,7 +77,7 @@ export async function requireUser(): Promise<SessionUser> {
 /** For pages: redirects home when the role lacks the permission. */
 export async function requirePagePermission(permission: Permission): Promise<SessionUser> {
   const user = await requireUser();
-  if (!can(user.role, permission)) redirect("/?denied=1");
+  if (!hasPermission(user, permission)) redirect("/?denied=1");
   return user;
 }
 
@@ -76,6 +85,6 @@ export async function requirePagePermission(permission: Permission): Promise<Ses
 export async function authorize(permission?: Permission): Promise<SessionUser> {
   const user = await getSessionUser();
   if (!user) throw new AppError("unauthenticated");
-  if (permission && !can(user.role, permission)) throw new AppError("forbidden");
+  if (permission && !hasPermission(user, permission)) throw new AppError("forbidden");
   return user;
 }

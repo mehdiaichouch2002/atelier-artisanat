@@ -27,6 +27,12 @@ export async function createUser(role: "owner" | "manager", active = true): Prom
   return u!.id;
 }
 
+/** Makes this (owner) account the single super administrator. */
+export async function makeSuperAdmin(userId: string): Promise<void> {
+  await admin`update atelier.users set is_super_admin = false where is_super_admin and id <> ${userId}`;
+  await admin`update atelier.users set is_super_admin = true where id = ${userId}`;
+}
+
 /** Empties all business data (keeps users, settings, categories and the default account). */
 export async function resetData() {
   await admin.unsafe(`

@@ -756,7 +756,7 @@
     "resetPassword": "Réinitialiser le mot de passe",
     "passwordReset": "Mot de passe réinitialisé. L'utilisateur a été déconnecté.",
     "managerPermissions": "Ce que peut faire un gérant / comptable",
-    "ownerOnly": "Réservé au propriétaire : soldes d'ouverture, virements, ajustements de caisse, remboursements, annulations de mouvements, annulation de lignes de paie, comptes, catégories, utilisateurs, réglages et journal d'audit.",
+    "ownerOnly": "Réservé au propriétaire : soldes d'ouverture, virements, ajustements de caisse, remboursements, annulations de mouvements, annulation de lignes de paie, comptes, catégories, réglages et journal d'audit. Les utilisateurs sont gérés uniquement par le super administrateur.",
     "accounts": "Caisses et comptes",
     "accountsHelp": "Les endroits où se trouve l'argent (caisse de l'atelier, banque…).",
     "newAccount": "Nouveau compte",
@@ -769,7 +769,9 @@
     "auditHelp": "Qui a créé ou modifié quoi, et quand.",
     "auditTable": "Table",
     "disableCategory": "Désactiver",
-    "enableCategory": "Activer"
+    "enableCategory": "Activer",
+    "superAdmin": "Super admin",
+    "usersSuperAdminOnly": "L'ajout et la gestion des utilisateurs sont réservés au super administrateur."
   },
   "permissions": {
     "workers_manage": "Gérer les ouvriers",

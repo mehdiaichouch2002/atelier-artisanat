@@ -37,7 +37,7 @@ export default async function SettingsPage() {
       settings: await getSettings(tx),
       categories: await listCategories(tx, { includeInactive: true }),
       accounts: await accountBalances(tx, { includeInactive: true }),
-      users: owner ? await listUsers(tx) : [],
+      users: user.isSuperAdmin ? await listUsers(tx) : [],
       weekLocked: (r?.n ?? 0) > 0,
     };
   });
@@ -61,7 +61,7 @@ export default async function SettingsPage() {
           </div>
         </Card>
 
-        {owner ? (
+        {user.isSuperAdmin ? (
           <Card id="users">
             <CardHeader title={t("settings.users")} description={t("settings.usersHelp")} />
             <ul className="divide-y divide-line">
@@ -71,9 +71,10 @@ export default async function SettingsPage() {
                     <span className="font-medium" dir="ltr">{u.email}</span>
                     <Badge tone={u.role === "owner" ? "primary" : "neutral"}>{t(`roles.${u.role}`)}</Badge>
                     {!u.active ? <Badge>{t("common.inactive")}</Badge> : null}
+                    {u.isSuperAdmin ? <Badge tone="copper">{t("settings.superAdmin")}</Badge> : null}
                     {u.id === user.id ? <Badge tone="info">{t("settings.you")}</Badge> : null}
                   </div>
-                  <UserRowForm id={u.id} displayName={u.displayName} role={u.role} active={u.active} />
+                  {u.id !== user.id ? <UserRowForm id={u.id} displayName={u.displayName} role={u.role} active={u.active} /> : null}
                   {u.id !== user.id ? (
                     <Dialog trigger={t("settings.resetPassword")} title={`${t("settings.resetPassword")} — ${u.displayName}`} triggerSize="sm" triggerVariant="ghost">
                       <ResetPasswordForm id={u.id} />
@@ -95,6 +96,12 @@ export default async function SettingsPage() {
               </ul>
               <p className="mt-2">{t("settings.ownerOnly")}</p>
             </div>
+          </Card>
+        ) : null}
+
+        {owner && !user.isSuperAdmin ? (
+          <Card>
+            <CardHeader title={t("settings.users")} description={t("settings.usersSuperAdminOnly")} />
           </Card>
         ) : null}
 

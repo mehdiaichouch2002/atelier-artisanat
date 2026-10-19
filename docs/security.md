@@ -17,7 +17,8 @@
 |---|---|
 | Owner | Everything. |
 | Manager / accountant | Workers, msrouf, weekly pay and settlement payments, customers, orders, customer payments, expenses, other income, cash counts (without adjustment), reports and CSV. |
-| Owner only | Opening balances, transfers, cash adjustments, refunds, reversals, voiding pay lines, accounts, categories, users, settings, audit log. |
+| Owner only | Opening balances, transfers, cash adjustments, refunds, reversals, voiding pay lines, accounts, categories, settings, audit log. |
+| Super administrator (one owner account, flag `users.is_super_admin`) | Additionally: create, edit and deactivate users, reset other users' passwords. Set with `npm run db:create-owner -- --super-admin`; at most one; must stay an active owner (database constraints). |
 | Worker | No account. |
 
 Enforced three times: hidden in the UI, checked by `authorize(permission)` in every server action / route

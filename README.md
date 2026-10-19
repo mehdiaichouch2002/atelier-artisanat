@@ -151,7 +151,18 @@ Expected output ends with `migrations up to date`. Running it again is safe.
 - **Rich demo** (several weeks of history, orders, expenses, babouches + cuivre): `npm run db:seed:full`, on an
   empty database only.
 
-More users (e.g. a manager) are added in the app under **Réglages → Utilisateurs**.
+- **Super administrator.** Only one account, the super administrator, can add, edit or deactivate users and
+  reset their passwords. Give that role to your own owner account by adding `-- --super-admin`:
+  ```powershell
+  $env:OWNER_EMAIL="you@example.com"
+  $env:OWNER_NAME="Your name"
+  npm run db:create-owner -- --super-admin
+  ```
+  Expected: `super administrator: you@example.com`. Running it with another e-mail moves the role to that
+  account. Without a super administrator, nobody can manage users in the app.
+
+The super administrator adds the other people (as **Gérant** or **Propriétaire**) in the app under
+**Réglages → Utilisateurs**.
 
 ### 5. Configure the app: `.env.local`
 

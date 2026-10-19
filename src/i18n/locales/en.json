@@ -756,7 +756,7 @@
     "resetPassword": "Reset password",
     "passwordReset": "Password reset. The user was signed out.",
     "managerPermissions": "What a manager / accountant can do",
-    "ownerOnly": "Owner only: opening balances, transfers, cash adjustments, refunds, movement reversals, voiding pay lines, accounts, categories, users, settings and the audit log.",
+    "ownerOnly": "Owner only: opening balances, transfers, cash adjustments, refunds, movement reversals, voiding pay lines, accounts, categories, settings and the audit log. Users are managed only by the super administrator.",
     "accounts": "Cash boxes and accounts",
     "accountsHelp": "Where the money is kept (workshop cash box, bank…).",
     "newAccount": "New account",
@@ -769,7 +769,9 @@
     "auditHelp": "Who created or changed what, and when.",
     "auditTable": "Table",
     "disableCategory": "Disable",
-    "enableCategory": "Enable"
+    "enableCategory": "Enable",
+    "superAdmin": "Super admin",
+    "usersSuperAdminOnly": "Adding and managing users is reserved for the super administrator."
   },
   "permissions": {
     "workers_manage": "Manage workers",

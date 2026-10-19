@@ -756,7 +756,7 @@
     "resetPassword": "Restablecer la contraseña",
     "passwordReset": "Contraseña restablecida. Se ha cerrado la sesión del usuario.",
     "managerPermissions": "Lo que puede hacer un encargado / contable",
-    "ownerOnly": "Solo el propietario: saldos iniciales, transferencias, ajustes de caja, reembolsos, anulación de movimientos, anulación de líneas de pago, cuentas, categorías, usuarios, ajustes y registro de auditoría.",
+    "ownerOnly": "Solo el propietario: saldos iniciales, transferencias, ajustes de caja, reembolsos, anulación de movimientos, anulación de líneas de pago, cuentas, categorías, ajustes y registro de auditoría. Los usuarios los gestiona solo el superadministrador.",
     "accounts": "Cajas y cuentas",
     "accountsHelp": "Dónde está el dinero (caja del taller, banco…).",
     "newAccount": "Nueva cuenta",
@@ -769,7 +769,9 @@
     "auditHelp": "Quién creó o modificó qué, y cuándo.",
     "auditTable": "Tabla",
     "disableCategory": "Desactivar",
-    "enableCategory": "Activar"
+    "enableCategory": "Activar",
+    "superAdmin": "Superadministrador",
+    "usersSuperAdminOnly": "Añadir y gestionar usuarios está reservado al superadministrador."
   },
   "permissions": {
     "workers_manage": "Gestionar trabajadores",

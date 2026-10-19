@@ -45,8 +45,20 @@ const MANAGER: ReadonlySet<Permission> = new Set<Permission>([
 
 export function can(role: Role | null | undefined, permission: Permission): boolean {
   if (!role) return false;
+  // User administration is not tied to a role: see hasPermission() (super administrator only).
+  if (permission === "users.manage") return false;
   if (role === "owner") return true;
   return MANAGER.has(permission);
 }
 
 export const MANAGER_PERMISSIONS = [...MANAGER];
+
+/**
+ * Permission check for a signed-in user. User administration ("users.manage") belongs to the single
+ * super administrator, whatever the role; everything else follows the role.
+ */
+export function hasPermission(user: { role: Role; isSuperAdmin?: boolean } | null | undefined, permission: Permission): boolean {
+  if (!user) return false;
+  if (permission === "users.manage") return user.isSuperAdmin === true;
+  return can(user.role, permission);
+}

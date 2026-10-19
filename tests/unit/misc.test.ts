@@ -3,7 +3,7 @@ import { csvCell, reportToCsv } from "@/lib/csv";
 import { whatsappLink } from "@/lib/whatsapp";
 import { sniffMime } from "@/lib/attachments";
 import { normalizePhone } from "@/domain/customers/service";
-import { can, MANAGER_PERMISSIONS } from "@/lib/auth/permissions";
+import { can, hasPermission, MANAGER_PERMISSIONS } from "@/lib/auth/permissions";
 import { createTranslator } from "@/i18n/translate";
 import fr from "@/i18n/locales/fr.json";
 import type { Report } from "@/domain/reports/service";
@@ -50,11 +50,18 @@ describe("helpers", () => {
     expect(sniffMime(new TextEncoder().encode("<html><script>"))).toBeNull();
   });
   it("keeps owner-only permissions away from managers", () => {
-    for (const p of ["ledger.reverse", "cash.adjust", "cash.transfer", "cash.opening", "refunds.record", "users.manage", "settings.manage", "payroll.void", "audit.view"] as const) {
+    for (const p of ["ledger.reverse", "cash.adjust", "cash.transfer", "cash.opening", "refunds.record", "settings.manage", "payroll.void", "audit.view"] as const) {
       expect(can("manager", p)).toBe(false);
       expect(can("owner", p)).toBe(true);
     }
     expect(MANAGER_PERMISSIONS).toContain("advances.record");
     expect(can(null, "reports.view")).toBe(false);
+  });
+  it("reserves user management to the super administrator", () => {
+    expect(hasPermission({ role: "owner" }, "users.manage")).toBe(false);
+    expect(hasPermission({ role: "manager", isSuperAdmin: false }, "users.manage")).toBe(false);
+    expect(hasPermission({ role: "owner", isSuperAdmin: true }, "users.manage")).toBe(true);
+    expect(hasPermission({ role: "owner", isSuperAdmin: true }, "cash.transfer")).toBe(true);
+    expect(hasPermission(null, "reports.view")).toBe(false);
   });
 });

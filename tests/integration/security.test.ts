@@ -1,7 +1,7 @@
 // Row Level Security and privilege tests: the restricted app role must not be able to read or
 // change data without a valid member context, and managers must not perform owner-only actions.
 import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { admin, app, asUser, createUser, defaultAccount, resetData } from "./helpers";
+import { admin, app, asUser, createUser, defaultAccount, makeSuperAdmin, resetData } from "./helpers";
 
 let owner: string;
 let manager: string;
@@ -78,13 +78,38 @@ describe("row level security", () => {
     expect(c!.created_by).toBe(manager);
   });
 
+  it("reserves user administration to the single super administrator", async () => {
+    const boss = await createUser("owner");
+    await makeSuperAdmin(boss);
+    const email = `new-${Date.now()}@test.local`;
+    // A regular owner can no longer create or edit users.
+    await expect(
+      asUser(owner, (tx) => tx`insert into atelier.users (email, display_name, role, password_hash) values (${email}, 'x', 'manager', 'h')`),
+    ).rejects.toMatchObject({ code: "42501" });
+    expect((await asUser(owner, (tx) => tx`update atelier.users set display_name = 'x' where id = ${manager}`)).count).toBe(0);
+    await expect(asUser(owner, (tx) => tx`select atelier.auth_set_password(${manager}, 'h', null)`)).rejects.toMatchObject({
+      code: "42501",
+    });
+    // The super administrator can.
+    await asUser(boss, (tx) => tx`insert into atelier.users (email, display_name, role, password_hash) values (${email}, 'x', 'manager', 'h')`);
+    expect((await asUser(boss, (tx) => tx`update atelier.users set display_name = 'Gérant' where id = ${manager}`)).count).toBe(1);
+    await asUser(boss, (tx) => tx`select atelier.auth_set_password(${manager}, 'scrypt$y', null)`);
+    // Only one super administrator, who must stay an active owner.
+    await expect(admin`update atelier.users set is_super_admin = true where id = ${owner}`).rejects.toMatchObject({ code: "23505" });
+    await expect(admin`update atelier.users set active = false where id = ${boss}`).rejects.toMatchObject({ code: "23514" });
+    await expect(admin`update atelier.users set role = 'manager' where id = ${boss}`).rejects.toMatchObject({ code: "23514" });
+    const [s] = await asUser(boss, (tx) => tx<{ v: boolean }[]>`select atelier.is_super_admin() as v`);
+    expect(s!.v).toBe(true);
+  });
+
   it("keeps at least one active owner", async () => {
-    await expect(asUser(owner, (tx) => tx`update atelier.users set active = false where role = 'owner'`)).rejects.toMatchObject({
+    // Even the schema owner cannot leave the workshop without an active owner (deferred trigger).
+    await expect(admin`update atelier.users set active = false, is_super_admin = false where role = 'owner'`).rejects.toMatchObject({
       code: "23514",
     });
   });
 
-  it("only lets a user change their own password unless owner", async () => {
+  it("only lets a user change their own password unless super administrator", async () => {
     await expect(asUser(manager, (tx) => tx`select atelier.auth_set_password(${owner}, 'x', null)`)).rejects.toMatchObject({
       code: "42501",
     });

@@ -1,6 +1,8 @@
 // Creates (or resets the password of) an owner account.
 //   MIGRATION_DATABASE_URL=... OWNER_EMAIL=... OWNER_NAME=... npm run db:create-owner
 // The password is read from OWNER_PASSWORD or asked interactively (not echoed).
+// Add `-- --super-admin` to make this account the single super administrator (the only one who can add,
+// edit or deactivate users); any previous super administrator loses the flag.
 import readline from "node:readline";
 import postgres from "postgres";
 import { hashPassword } from "./lib.mjs";
@@ -36,6 +38,13 @@ try {
     on conflict (email) do update set password_hash = excluded.password_hash, role = 'owner', active = true
     returning id`;
   await sql`delete from atelier.sessions where user_id = ${u.id}`;
+  if (process.argv.includes("--super-admin")) {
+    await sql.begin(async (tx) => {
+      await tx`update atelier.users set is_super_admin = false where is_super_admin and id <> ${u.id}`;
+      await tx`update atelier.users set is_super_admin = true where id = ${u.id}`;
+    });
+    console.log(`super administrator: ${email}`);
+  }
   console.log(`owner ready: ${email}`);
 } catch (e) {
   console.error("failed:", e.message);
