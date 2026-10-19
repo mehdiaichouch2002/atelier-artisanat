@@ -11,8 +11,8 @@ function DuplicateWarning() {
   const similar = state.data?.similar as { id: string; name: string; phone: string | null }[] | undefined;
   if (!similar?.length) return null;
   return (
-    <div className="rounded-lg border border-warn/30 bg-warn-soft p-3 text-sm" role="alert">
-      <p className="font-medium text-warn">{t("customers.similarFound")}</p>
+    <div className="rounded-lg border border-warn/30 bg-warn-soft p-3 text-sm">
+      <p className="font-medium text-warn">{t("customers.possibleDuplicates")}</p>
       <ul className="mt-2 list-disc ps-5">
         {similar.map((s) => (
           <li key={s.id}>

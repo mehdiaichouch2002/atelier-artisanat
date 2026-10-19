@@ -498,7 +498,8 @@
     "reactivate": "Réactiver",
     "deactivateConfirm": "Le client sera masqué des listes. Ses commandes et paiements sont conservés.",
     "deactivated": "Client désactivé.",
-    "reactivated": "Client réactivé."
+    "reactivated": "Client réactivé.",
+    "possibleDuplicates": "Clients existants qui se ressemblent :"
   },
   "expenses": {
     "description": "Achats et frais de l'atelier. Les avances sur salaire n'y figurent pas.",

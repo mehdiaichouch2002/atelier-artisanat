@@ -11,7 +11,7 @@ const variants: Record<Variant, string> = {
   secondary: "bg-surface text-ink border border-line-strong hover:bg-sunken",
   ghost: "text-ink-soft hover:bg-sunken hover:text-ink",
   danger: "bg-bad text-white hover:bg-[#87281f]",
-  copper: "bg-copper text-white hover:bg-[#8c4b29]",
+  copper: "bg-copper text-white hover:bg-[#7a3f20]",
 };
 const sizes: Record<Size, string> = {
   sm: "min-h-9 px-3 text-sm",

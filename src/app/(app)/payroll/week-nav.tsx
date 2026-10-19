@@ -10,9 +10,9 @@ export function WeekNav({ week, basePath, t, currentWeek }: { week: string; base
       <Link
         href={`${basePath}${sep}week=${addDays(week, -7)}`}
         className="inline-flex min-h-10 items-center gap-1 rounded-lg border border-line bg-surface px-3 text-sm hover:bg-sunken"
-        aria-label={t("payroll.previousWeek")}
       >
         <ChevronLeft className="size-4 rtl:rotate-180" aria-hidden /> {t("payroll.previousWeekShort")}
+        <span className="sr-only"> ({t("payroll.previousWeek")})</span>
       </Link>
       <form method="get" action={basePath.split("?")[0]} className="flex items-center gap-2">
         {basePath.includes("?")
@@ -27,9 +27,10 @@ export function WeekNav({ week, basePath, t, currentWeek }: { week: string; base
       <Link
         href={`${basePath}${sep}week=${addDays(week, 7)}`}
         className="inline-flex min-h-10 items-center gap-1 rounded-lg border border-line bg-surface px-3 text-sm hover:bg-sunken"
-        aria-label={t("payroll.nextWeek")}
       >
-        {t("payroll.nextWeekShort")} <ChevronRight className="size-4 rtl:rotate-180" aria-hidden />
+        {t("payroll.nextWeekShort")}
+        <span className="sr-only"> ({t("payroll.nextWeek")})</span>
+        <ChevronRight className="size-4 rtl:rotate-180" aria-hidden />
       </Link>
       {week !== currentWeek ? (
         <Link href={`${basePath}${sep}week=${currentWeek}`} className="text-sm text-primary hover:underline">

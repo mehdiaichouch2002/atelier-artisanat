@@ -76,7 +76,7 @@ export function AppShell({
   }, [pathname]);
 
   return (
-    <div className="min-h-dvh md:grid md:grid-cols-[15.5rem_1fr]">
+    <div className="min-h-dvh md:grid md:grid-cols-[15.5rem_minmax(0,1fr)]">
       <a
         href="#main"
         className="sr-only focus:not-sr-only focus:fixed focus:start-2 focus:top-2 focus:z-50 focus:rounded focus:bg-surface focus:px-3 focus:py-2"
@@ -95,7 +95,7 @@ export function AppShell({
         <div className="px-3 pb-3">
           <Link
             href="/advances/new"
-            className="flex min-h-11 items-center justify-center gap-2 rounded-lg bg-copper px-3 font-medium text-white hover:bg-[#8c4b29]"
+            className="flex min-h-11 items-center justify-center gap-2 rounded-lg bg-copper px-3 font-medium text-white hover:bg-[#7a3f20]"
           >
             <Plus className="size-4" aria-hidden />
             {t("quick.advance")}

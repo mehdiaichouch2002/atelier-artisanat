@@ -107,13 +107,13 @@ export default async function DashboardPage({ searchParams }: { searchParams: Se
           <h2 id="period-title" className="font-sans text-sm font-semibold uppercase tracking-wide text-ink-soft">{t("dashboard.period")}</h2>
           <PeriodPicker period={period} basePath="/" t={t} />
         </div>
-        <div className="grid gap-3 md:grid-cols-3">
+        <div className="grid gap-3 lg:grid-cols-3">
           <Card className="p-4">
             <h3 className="font-sans text-sm font-semibold">{t("dashboard.cashMovement")}</h3>
             <dl className="mt-2 space-y-1.5 text-sm">
-              <div className="flex justify-between gap-2"><dt className="flex items-center gap-1 text-ink-soft"><ArrowDownLeft className="size-4 text-ok" aria-hidden />{t("dashboard.cashIn")}</dt><dd><Money cents={d.cashInCents} tone="in" /></dd></div>
-              <div className="flex justify-between gap-2"><dt className="flex items-center gap-1 text-ink-soft"><ArrowUpRight className="size-4 text-copper" aria-hidden />{t("dashboard.cashOut")}</dt><dd><Money cents={d.cashOutCents} tone="out" /></dd></div>
-              <div className="flex justify-between gap-2 border-t border-line pt-1.5 font-semibold"><dt>{t("dashboard.netCash")}</dt><dd><Money cents={d.cashInCents - d.cashOutCents} signed tone="auto" /></dd></div>
+              <div className="flex flex-wrap justify-between gap-x-2"><dt className="flex items-center gap-1 text-ink-soft"><ArrowDownLeft className="size-4 text-ok" aria-hidden />{t("dashboard.cashIn")}</dt><dd><Money cents={d.cashInCents} tone="in" /></dd></div>
+              <div className="flex flex-wrap justify-between gap-x-2"><dt className="flex items-center gap-1 text-ink-soft"><ArrowUpRight className="size-4 text-copper" aria-hidden />{t("dashboard.cashOut")}</dt><dd><Money cents={d.cashOutCents} tone="out" /></dd></div>
+              <div className="flex flex-wrap justify-between gap-x-2 border-t border-line pt-1.5 font-semibold"><dt>{t("dashboard.netCash")}</dt><dd><Money cents={d.cashInCents - d.cashOutCents} signed tone="auto" /></dd></div>
             </dl>
             <p className="mt-2 text-xs text-ink-soft">{t("dashboard.cashMovementHelp")}</p>
             <Link href={hrefWith("/reports/cash-flow", pq)} className="mt-2 inline-block text-sm text-primary hover:underline">{t("dashboard.details")}</Link>
@@ -121,18 +121,18 @@ export default async function DashboardPage({ searchParams }: { searchParams: Se
           <Card className="p-4">
             <h3 className="font-sans text-sm font-semibold">{t("dashboard.customers")}</h3>
             <dl className="mt-2 space-y-1.5 text-sm">
-              <div className="flex justify-between gap-2"><dt className="text-ink-soft"><Link href={hrefWith("/reports/customer-payments", pq)} className="hover:underline">{t("dashboard.paymentsReceived")}</Link></dt><dd><Money cents={d.customerPaymentsCents} /></dd></div>
-              <div className="flex justify-between gap-2"><dt className="text-ink-soft"><Link href={hrefWith("/reports/order-value", pq)} className="hover:underline">{t("dashboard.recordedSales", { count: d.recordedSalesCount })}</Link></dt><dd><Money cents={d.recordedSalesCents} /></dd></div>
-              {d.customerCreditsCents ? <div className="flex justify-between gap-2"><dt className="text-ink-soft">{t("dashboard.customerCredits")}</dt><dd><Money cents={d.customerCreditsCents} /></dd></div> : null}
+              <div className="flex flex-wrap justify-between gap-x-2"><dt className="text-ink-soft"><Link href={hrefWith("/reports/customer-payments", pq)} className="hover:underline">{t("dashboard.paymentsReceived")}</Link></dt><dd><Money cents={d.customerPaymentsCents} /></dd></div>
+              <div className="flex flex-wrap justify-between gap-x-2"><dt className="text-ink-soft"><Link href={hrefWith("/reports/order-value", pq)} className="hover:underline">{t("dashboard.recordedSales", { count: d.recordedSalesCount })}</Link></dt><dd><Money cents={d.recordedSalesCents} /></dd></div>
+              {d.customerCreditsCents ? <div className="flex flex-wrap justify-between gap-x-2"><dt className="text-ink-soft">{t("dashboard.customerCredits")}</dt><dd><Money cents={d.customerCreditsCents} /></dd></div> : null}
             </dl>
             <p className="mt-2 text-xs text-ink-soft">{t("dashboard.salesHelp")}</p>
           </Card>
           <Card className="p-4">
             <h3 className="font-sans text-sm font-semibold">{t("dashboard.workersAndExpenses")}</h3>
             <dl className="mt-2 space-y-1.5 text-sm">
-              <div className="flex justify-between gap-2"><dt className="text-ink-soft"><Link href={hrefWith("/advances", pq)} className="hover:underline">{t("dashboard.wageAdvances")}</Link></dt><dd><Money cents={d.wageAdvancesCents} /></dd></div>
-              <div className="flex justify-between gap-2"><dt className="text-ink-soft"><Link href={hrefWith("/reports/worker-payments", pq)} className="hover:underline">{t("dashboard.workerPayments")}</Link></dt><dd><Money cents={d.workerPaymentsCents} /></dd></div>
-              <div className="flex justify-between gap-2"><dt className="text-ink-soft"><Link href={hrefWith("/expenses", pq)} className="hover:underline">{t("dashboard.expenses")}</Link></dt><dd><Money cents={d.expensesCents} /></dd></div>
+              <div className="flex flex-wrap justify-between gap-x-2"><dt className="text-ink-soft"><Link href={hrefWith("/advances", pq)} className="hover:underline">{t("dashboard.wageAdvances")}</Link></dt><dd><Money cents={d.wageAdvancesCents} /></dd></div>
+              <div className="flex flex-wrap justify-between gap-x-2"><dt className="text-ink-soft"><Link href={hrefWith("/reports/worker-payments", pq)} className="hover:underline">{t("dashboard.workerPayments")}</Link></dt><dd><Money cents={d.workerPaymentsCents} /></dd></div>
+              <div className="flex flex-wrap justify-between gap-x-2"><dt className="text-ink-soft"><Link href={hrefWith("/expenses", pq)} className="hover:underline">{t("dashboard.expenses")}</Link></dt><dd><Money cents={d.expensesCents} /></dd></div>
             </dl>
             <p className="mt-2 text-xs text-ink-soft">{t("dashboard.expensesHelp")}</p>
           </Card>

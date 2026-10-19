@@ -498,7 +498,8 @@
     "reactivate": "Reactivar",
     "deactivateConfirm": "El cliente quedará oculto en las listas. Sus pedidos y pagos se conservan.",
     "deactivated": "Cliente desactivado.",
-    "reactivated": "Cliente reactivado."
+    "reactivated": "Cliente reactivado.",
+    "possibleDuplicates": "Clientes existentes parecidos:"
   },
   "expenses": {
     "description": "Compras y gastos del taller. Los anticipos de salario no se incluyen.",

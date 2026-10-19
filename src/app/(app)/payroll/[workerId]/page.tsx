@@ -104,7 +104,7 @@ export default async function WorkerWeekPage({ params, searchParams }: { params:
             )}
             {recorded.adjustmentsCents !== 0 ? line(t("payroll.adjustments"), recorded.adjustmentsCents) : null}
             {recorded.carryCents !== 0 ? line(t("payroll.carried"), recorded.carryCents) : null}
-            {line(t("payroll.due"), shown.dueCents, { strong: false })}
+            {line(t("money.due"), shown.dueCents, { strong: false })}
             {line(t("payroll.wageAdvancesDeducted"), recorded.wageAdvancesCents, { sign: "-" })}
             {line(t("payroll.paymentsMade"), recorded.paymentsCents, { sign: "-" })}
             {line(t("payroll.remaining"), shown.remainingCents, { strong: true })}
@@ -138,7 +138,17 @@ export default async function WorkerWeekPage({ params, searchParams }: { params:
             {!detail.active ? (
               <p className="text-ink-soft">{t("workers.inactiveNotice")}</p>
             ) : shown.status === "settled" ? (
-              <Notice tone="ok">{t("payroll.weekSettled")}</Notice>
+              <Notice tone="ok">
+                {t("payroll.weekSettled")}
+                {payments.find((p) => !p.reversalOf && !p.reversedBy) ? (
+                  <>
+                    {" · "}
+                    <Link href={`/print/receipt/${payments.find((p) => !p.reversalOf && !p.reversedBy)!.id}`} target="_blank" className="font-semibold underline">
+                      {t("print.receipt")}
+                    </Link>
+                  </>
+                ) : null}
+              </Notice>
             ) : (
               <PaymentForm ctx={ctx} />
             )}

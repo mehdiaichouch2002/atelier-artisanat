@@ -253,6 +253,26 @@ describe("weekly settlement", () => {
     await expect(admin`delete from atelier.worker_earnings where id = ${base}`).rejects.toMatchObject({ code: "42501" });
   });
 
+  it("reports msrouf on a week without confirmed pay separately from the balance owed", async () => {
+    const w = await newWorker(owner);
+    // Last week fully recorded with 300 DH still owed.
+    await asUser(owner, (tx) =>
+      recordSettlementPayment(tx, {
+        workerId: w, payWeek: "2026-10-05", amountCents: 120000, occurredAt: at("2026-10-10T17:00"), accountId: account, method: "cash",
+      }),
+    );
+    // This week: a 200 DH advance, pay not confirmed yet.
+    await asUser(owner, (tx) =>
+      recordAdvance(tx, {
+        workerId: w, amountCents: 20000, occurredAt: at("2026-10-12T09:00"), category: "daily", treatment: "wage",
+        accountId: account, method: "cash",
+      }),
+    );
+    const [b] = await admin<{ balance_cents: number; pending_advances_cents: number }[]>`
+      select balance_cents, pending_advances_cents from atelier.v_worker_balances where worker_id = ${w}`;
+    expect(b).toEqual({ balance_cents: 30000, pending_advances_cents: 20000 });
+  });
+
   it("does not accept advances or payments for inactive workers", async () => {
     const w = await newWorker(owner);
     await admin`update atelier.workers set active = false where id = ${w}`;

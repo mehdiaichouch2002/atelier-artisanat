@@ -113,8 +113,14 @@ export default async function PayrollPage({ searchParams }: { searchParams: Sear
                   </Td>
                   <Td label={t("fields.status")}><WeekStatusBadge status={r.week.status} t={t} /></Td>
                   <Td label="" className="no-print">
-                    {r.active && r.week.status !== "settled" ? (
-                      <Dialog trigger={t("payroll.pay")} title={`${t("payroll.recordPayment")} — ${r.fullName}`} triggerSize="sm" triggerVariant="primary">
+                    {r.active ? (
+                      <Dialog
+                        trigger={t("payroll.pay")}
+                        title={`${t("payroll.recordPayment")} — ${r.fullName}`}
+                        triggerSize="sm"
+                        triggerVariant="primary"
+                        disabled={r.week.status === "settled"}
+                      >
                         <PaymentForm
                           ctx={{
                             workerId: r.workerId,

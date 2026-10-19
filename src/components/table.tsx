@@ -9,7 +9,7 @@ import { cx } from "./ui/cx";
  */
 export function Table({ children, caption, className }: { children: React.ReactNode; caption?: string; className?: string }) {
   return (
-    <div className={cx("overflow-x-auto", className)}>
+    <div className={cx("relative overflow-x-auto", className)}>
       <table className="rtable">
         {caption ? <caption className="sr-only">{caption}</caption> : null}
         {children}

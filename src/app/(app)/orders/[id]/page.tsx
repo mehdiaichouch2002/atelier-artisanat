@@ -168,13 +168,25 @@ export default async function OrderPage({ params, searchParams }: { params: Prom
             <p className="pt-2 text-xs text-ink-soft">{t("orders.balanceFormula")}</p>
           </dl>
           <div className="no-print flex flex-wrap gap-2 border-t border-line p-3">
-            {o.status !== "cancelled" && o.money.balanceCents > 0 && can(user.role, "payments.record") ? (
-              <Dialog trigger={t("orders.recordPayment")} title={`${t("orders.recordPayment")} — ${o.reference}`} triggerVariant="primary" triggerSize="sm">
+            {o.status !== "cancelled" && can(user.role, "payments.record") ? (
+              <Dialog
+                trigger={t("orders.recordPayment")}
+                title={`${t("orders.recordPayment")} — ${o.reference}`}
+                triggerVariant="primary"
+                triggerSize="sm"
+                disabled={o.money.balanceCents <= 0}
+              >
                 <OrderPaymentForm orderId={id} balanceCents={o.money.balanceCents} nowLocal={now} {...data.accounts} />
               </Dialog>
             ) : null}
-            {maxRefund(o.money.paidCents, o.money.refundedCents) > 0 && can(user.role, "refunds.record") ? (
-              <Dialog trigger={t("orders.refund")} title={`${t("orders.refund")} — ${o.reference}`} triggerVariant="secondary" triggerSize="sm">
+            {o.money.paidCents > 0 && can(user.role, "refunds.record") ? (
+              <Dialog
+                trigger={t("orders.refund")}
+                title={`${t("orders.refund")} — ${o.reference}`}
+                triggerVariant="secondary"
+                triggerSize="sm"
+                disabled={maxRefund(o.money.paidCents, o.money.refundedCents) <= 0}
+              >
                 <OrderPaymentForm
                   orderId={id}
                   refund

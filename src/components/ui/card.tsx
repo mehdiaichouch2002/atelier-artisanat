@@ -2,7 +2,7 @@ import { cx } from "./cx";
 
 export function Card({ className, children, ...rest }: React.HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={cx("card", className)} {...rest}>
+    <div className={cx("card min-w-0", className)} {...rest}>
       {children}
     </div>
   );

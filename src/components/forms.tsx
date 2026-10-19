@@ -515,10 +515,13 @@ export function Dialog({
   triggerVariant = "secondary",
   triggerSize = "md",
   triggerClassName,
+  disabled,
 }: {
   trigger: React.ReactNode;
   title: React.ReactNode;
   children: React.ReactNode;
+  /** Disables the trigger but keeps an open dialog (and its confirmation message) mounted. */
+  disabled?: boolean;
   triggerVariant?: "primary" | "secondary" | "ghost" | "danger" | "copper";
   triggerSize?: "sm" | "md" | "lg";
   triggerClassName?: string;
@@ -535,6 +538,7 @@ export function Dialog({
         size={triggerSize}
         className={triggerClassName}
         aria-haspopup="dialog"
+        disabled={disabled}
         onClick={() => {
           setMounted((m) => m + 1);
           ref.current?.showModal();

@@ -498,7 +498,8 @@
     "reactivate": "Reactivate",
     "deactivateConfirm": "The customer will be hidden from lists. Orders and payments are kept.",
     "deactivated": "Customer deactivated.",
-    "reactivated": "Customer reactivated."
+    "reactivated": "Customer reactivated.",
+    "possibleDuplicates": "Existing customers that look similar:"
   },
   "expenses": {
     "description": "Workshop purchases and costs. Wage advances are not included.",

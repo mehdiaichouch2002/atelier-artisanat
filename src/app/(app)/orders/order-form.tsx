@@ -63,7 +63,7 @@ function LinesEditor({ initial, categories }: { initial: LineState[]; categories
           const id = `line-${l.key}`;
           return (
             <li key={l.key} className="rounded-lg border border-line bg-white p-3">
-              <div className="grid gap-3 md:grid-cols-[10rem_1fr_6rem_9rem_auto] md:items-end">
+              <div className="grid gap-3 lg:grid-cols-[10rem_1fr_6rem_9rem_auto] lg:items-end sm:grid-cols-2">
                 <div>
                   <label htmlFor={`${id}-cat`} className="mb-1 block text-sm font-medium">{t("fields.category")}</label>
                   <select
@@ -123,8 +123,8 @@ function LinesEditor({ initial, categories }: { initial: LineState[]; categories
                   />
                   {err(`lines.${i}.unitPrice`) ? <p className="mt-1 text-sm text-bad">{err(`lines.${i}.unitPrice`)}</p> : null}
                 </div>
-                <div className="flex items-center justify-between gap-2 md:flex-col md:items-end">
-                  <span className="text-sm text-ink-soft md:hidden">{t("fields.total")}</span>
+                <div className="flex items-center justify-between gap-2 lg:flex-col lg:items-end">
+                  <span className="text-sm text-ink-soft lg:hidden">{t("fields.total")}</span>
                   <span className="font-semibold">{lineTotal != null ? <Money cents={lineTotal} /> : "—"}</span>
                   {lines.length > 1 ? (
                     <Button
