@@ -87,9 +87,18 @@ select worker_id, pay_week,
 from parts
 group by worker_id, pay_week;
 
--- Overall outstanding amount per worker (positive = workshop owes the worker).
+-- Overall position per worker.
+--   balance_cents          = Σ remaining of weeks whose pay is recorded (or that carry/adjust amounts);
+--                            positive = the workshop owes the worker.
+--   pending_advances_cents = msrouf and payments on weeks whose pay is not recorded yet; they will be
+--                            deducted when that week's pay is confirmed (shown separately, not netted).
 create view atelier.v_worker_balances with (security_invoker = true) as
-select w.id as worker_id, coalesce(sum(ww.remaining_cents), 0)::bigint as balance_cents
+select w.id as worker_id,
+       coalesce(sum(ww.remaining_cents) filter (where ww.has_base or ww.carry_cents <> 0 or ww.adjustments_cents <> 0), 0)::bigint
+         as balance_cents,
+       coalesce(sum(ww.wage_advances_cents + ww.payments_cents)
+                  filter (where not (ww.has_base or ww.carry_cents <> 0 or ww.adjustments_cents <> 0)), 0)::bigint
+         as pending_advances_cents
 from atelier.workers w
 left join atelier.v_worker_weeks ww on ww.worker_id = w.id
 group by w.id;

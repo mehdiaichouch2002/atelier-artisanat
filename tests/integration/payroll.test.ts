@@ -109,10 +109,10 @@ describe("weekly settlement", () => {
     expect(week.remainingCents).toBe(0);
     expect(week.status).toBe("settled");
 
-    const [{ n }] = await admin<{ n: number }[]>`
+    const [{ n }] = await admin<[{ n: number }]>`
       select count(*)::int as n from atelier.ledger_entries where worker_id = ${w} and entry_type = 'worker_payment'`;
     expect(n).toBe(2);
-    const [{ base }] = await admin<{ base: number }[]>`
+    const [{ base }] = await admin<[{ base: number }]>`
       select count(*)::int as base from atelier.worker_earnings where worker_id = ${w}`;
     expect(base).toBe(1);
   });
@@ -140,7 +140,7 @@ describe("weekly settlement", () => {
     const c = await asUser(owner, (tx) => weekComponents(tx, w, WEEK));
     expect(c.wageAdvancesCents).toBe(0);
     expect(c.businessAdvancesCents).toBe(40000);
-    const [{ expense_category }] = await admin<{ expense_category: string }[]>`
+    const [{ expense_category }] = await admin<[{ expense_category: string }]>`
       select expense_category from atelier.ledger_entries where worker_id = ${w}`;
     expect(expense_category).toBe("materials");
   });

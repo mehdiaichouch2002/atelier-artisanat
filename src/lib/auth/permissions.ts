@@ -4,27 +4,31 @@
 
 export type Role = "owner" | "manager";
 
-export type Permission =
-  | "workers.manage"
-  | "advances.record"
-  | "payroll.record"
-  | "payroll.void"
-  | "customers.manage"
-  | "orders.manage"
-  | "payments.record"
-  | "refunds.record"
-  | "expenses.record"
-  | "income.record"
-  | "ledger.reverse"
-  | "cash.count"
-  | "cash.adjust"
-  | "cash.transfer"
-  | "cash.opening"
-  | "accounts.manage"
-  | "settings.manage"
-  | "users.manage"
-  | "audit.view"
-  | "reports.view";
+export const ALL_PERMISSIONS = [
+  "workers.manage",
+  "advances.record",
+  "payroll.record",
+  "payroll.void",
+  "customers.manage",
+  "orders.manage",
+  "payments.record",
+  "refunds.record",
+  "expenses.record",
+  "income.record",
+  "ledger.reverse",
+  "cash.count",
+  "cash.adjust",
+  "cash.transfer",
+  "cash.opening",
+  "accounts.manage",
+  "settings.manage",
+  "users.manage",
+  "audit.view",
+  "reports.view",
+] as const;
+
+export type Permission = (typeof ALL_PERMISSIONS)[number];
+
 
 const MANAGER: ReadonlySet<Permission> = new Set<Permission>([
   "workers.manage",

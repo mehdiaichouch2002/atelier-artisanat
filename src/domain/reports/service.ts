@@ -463,9 +463,10 @@ export async function buildReport(
     }
     case "worker-balances": {
       const rows = await tx<ReportRow[]>`
-        select w.full_name as worker, w.code, w.active, b.balance_cents as "balanceCents"
+         select w.full_name as worker, w.code, b.balance_cents as "balanceCents",
+               b.pending_advances_cents as "pendingCents"
         from atelier.workers w join atelier.v_worker_balances b on b.worker_id = w.id
-        where b.balance_cents <> 0 order by b.balance_cents desc`;
+        where b.balance_cents <> 0 or b.pending_advances_cents <> 0 order by b.balance_cents desc`;
       return {
         key,
         usesPeriod: false,
@@ -473,9 +474,10 @@ export async function buildReport(
           { key: "worker", label: "fields.worker", kind: "text" },
           { key: "code", label: "fields.code", kind: "text" },
           { key: "balanceCents", label: "payroll.balanceOwed", kind: "money" },
+          { key: "pendingCents", label: "payroll.pendingAdvances", kind: "money" },
         ],
-        rows: rows.map(({ active: _a, ...r }) => r),
-        totals: { balanceCents: sumBy(rows, (r) => Number(r.balanceCents)) },
+        rows,
+        totals: { balanceCents: sumBy(rows, (r) => Number(r.balanceCents)), pendingCents: sumBy(rows, (r) => Number(r.pendingCents)) },
       };
     }
     case "reconciliation": {

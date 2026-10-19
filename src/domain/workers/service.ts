@@ -20,6 +20,7 @@ export interface Worker {
   pieceRateCents: Cents | null;
   defaultDays: string | null;
   balanceCents: Cents;
+  pendingAdvancesCents: Cents;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -44,6 +45,7 @@ const SELECT = (tx: Tx) => tx`
          w.pay_kind as "payKind", w.weekly_amount_cents as "weeklyAmountCents",
          w.daily_rate_cents as "dailyRateCents", w.piece_rate_cents as "pieceRateCents",
          w.default_days::text as "defaultDays", coalesce(b.balance_cents, 0)::bigint as "balanceCents",
+         coalesce(b.pending_advances_cents, 0)::bigint as "pendingAdvancesCents",
          w.created_at as "createdAt", w.updated_at as "updatedAt"
   from atelier.workers w
   left join atelier.categories c on c.id = w.category_id

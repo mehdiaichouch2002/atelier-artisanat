@@ -86,6 +86,8 @@ export interface SettlementRow {
   code: string | null;
   active: boolean;
   arrangement: Arrangement;
+  /** True when the base pay of the week is recorded (false = the amounts use a proposal). */
+  recordedBase: boolean;
   /** Base pay proposed from the arrangement when none is recorded yet (null when it needs input). */
   proposedBaseCents: Cents | null;
   week: WeekSummary;
@@ -120,6 +122,7 @@ export async function settlementSheet(tx: Tx, payWeek: string): Promise<Settleme
       code: w.code,
       active: w.active,
       arrangement,
+      recordedBase: comps.hasBase,
       proposedBaseCents: proposal?.amountCents ?? null,
       week: summarizeWithProposal(comps, comps.hasBase ? null : (proposal?.amountCents ?? null)),
       previousBalanceCents: prevBy.get(w.id) ?? 0,

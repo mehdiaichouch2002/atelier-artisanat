@@ -16,7 +16,7 @@
     "test:unit": "vitest run --project unit",
     "test:integration": "vitest run --project integration",
     "test:e2e": "playwright test",
-    "i18n:check": "node scripts/check-i18n.mjs",
+    "i18n:check": "vitest run tests/unit/i18n.test.ts",
     "db:migrate": "node scripts/migrate.mjs",
     "db:seed": "node scripts/seed-demo.mjs",
     "db:create-owner": "node scripts/create-owner.mjs"

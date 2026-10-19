@@ -14,3 +14,4 @@ next-env.d.ts
 *.sql.gz
 backups/
 .DS_Store
+shots.tmp.mjs
