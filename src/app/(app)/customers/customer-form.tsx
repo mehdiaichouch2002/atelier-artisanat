@@ -39,10 +39,15 @@ export function CustomerForm({ action, customer }: { action: (s: ActionState, fd
       <div className="grid gap-4 sm:grid-cols-2">
         <TextField name="name" label={t("fields.customerName")} required defaultValue={customer?.name} />
         <TextField name="phone" type="tel" label={t("fields.phone")} defaultValue={customer?.phone} dir="ltr" />
-        <TextField name="email" type="email" label={t("fields.email")} defaultValue={customer?.email} dir="ltr" />
-        <TextField name="address" label={t("fields.address")} defaultValue={customer?.address} />
       </div>
-      <TextAreaField name="notes" label={t("fields.notes")} defaultValue={customer?.notes} />
+      <details className="rounded-lg border border-line p-3" open={customer && (customer.email || customer.address || customer.notes) ? true : undefined}>
+        <summary className="cursor-pointer text-sm font-medium">{t("common.moreOptions")}</summary>
+        <div className="mt-3 grid gap-4 sm:grid-cols-2">
+          <TextField name="email" type="email" label={t("fields.email")} defaultValue={customer?.email} dir="ltr" />
+          <TextField name="address" label={t("fields.address")} defaultValue={customer?.address} />
+          <TextAreaField name="notes" label={t("fields.notes")} defaultValue={customer?.notes} wrapperClassName="sm:col-span-2" />
+        </div>
+      </details>
       {!customer ? <DuplicateWarning /> : null}
       <SubmitButton>{customer ? t("common.saveChanges") : t("customers.create")}</SubmitButton>
     </ActionForm>

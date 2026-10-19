@@ -55,3 +55,9 @@ export function fmtDate(iso: string): string {
 }
 
 export const unique = (prefix: string) => `${prefix} ${Date.now().toString(36)}`;
+
+/** Opens the "More options" fold of the form on the page (fields that are rarely needed live there). */
+export async function moreOptions(page: Page) {
+  const summary = page.locator("details:not([open]) > summary", { hasText: /Plus d'options|More options|Más opciones|خيارات أخرى/ }).first();
+  if (await summary.count()) await summary.click();
+}

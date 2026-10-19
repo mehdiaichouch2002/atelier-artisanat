@@ -17,7 +17,8 @@
     "expenses": "Dépenses",
     "cash": "Caisse",
     "reports": "Rapports",
-    "settings": "Réglages"
+    "settings": "Réglages",
+    "manage": "Gérer"
   },
   "quick": {
     "title": "Saisie rapide",
@@ -62,7 +63,8 @@
     "searchPlaceholder": "Tapez pour chercher…",
     "seeAll": "Tout voir",
     "skipToContent": "Aller au contenu",
-    "sortBy": "Trier par"
+    "sortBy": "Trier par",
+    "filters": "Filtres"
   },
   "auth": {
     "signIn": "Se connecter",
@@ -337,7 +339,8 @@
     "advancesThisWeek": "Msrouf de la semaine",
     "paymentsThisWeek": "Paiements de la semaine",
     "noPayments": "Aucun paiement pour cette semaine",
-    "pendingAdvances": "Msrouf à déduire (paie non confirmée)"
+    "pendingAdvances": "Msrouf à déduire (paie non confirmée)",
+    "alreadyGiven": "Déjà donné cette semaine"
   },
   "weekStatus": {
     "empty": "Rien",
@@ -372,7 +375,11 @@
     "businessAdvances": "Argent pour achats de l'atelier",
     "businessHelp": "Comptés dans les dépenses, jamais déduits de la paie.",
     "totalCashOut": "Total sorti de la caisse",
-    "empty": "Aucun msrouf sur cette période"
+    "empty": "Aucun msrouf sur cette période",
+    "whoReceives": "Qui reçoit l'argent ?",
+    "quickAmounts": "Choisir un montant rapide",
+    "whatFor": "C'est pour quoi ?",
+    "notePlaceholder": "Ex. repas, transport…"
   },
   "advanceCategory": {
     "daily": "Avance du jour",
@@ -384,7 +391,7 @@
     "wage": "Avance sur salaire",
     "wageHelp": "Sera déduite de la paie de la semaine.",
     "business": "Dépense de l'atelier",
-    "businessHelp": "Argent pour l'atelier (ex. achat de cuir). Ne réduit pas la paie."
+    "businessHelp": "Argent pour l'atelier (ex. achat de cuivre). Ne réduit pas la paie."
   },
   "orders": {
     "description": "Commandes des clients, de la négociation à la livraison.",
@@ -409,7 +416,7 @@
     "newCustomerInline": "+ Nouveau client",
     "pickExistingCustomer": "Choisir un client existant",
     "lines": "Articles",
-    "linePlaceholder": "Ex. Babouches cuir jaune, pointure 42",
+    "linePlaceholder": "Ex. Plateau en cuivre ciselé 60 cm",
     "addLine": "Ajouter un article",
     "removeLine": "Supprimer l'article {n}",
     "linesLocked": "La production a commencé : le prix ne se modifie plus ici. Utilisez une remise ou un supplément documenté sur la commande.",
@@ -452,7 +459,9 @@
     "noAttachments": "Aucun document",
     "upload": "Ajouter",
     "attachmentSaved": "Document ajouté.",
-    "quickPaymentHelp": "Choisissez la commande, saisissez le montant reçu."
+    "quickPaymentHelp": "Choisissez la commande, saisissez le montant reçu.",
+    "customerAndDelivery": "Client et livraison",
+    "depositAccount": "Caisse / compte de l'acompte"
   },
   "orderStatus": {
     "quote": "Devis / à confirmer",
@@ -572,7 +581,10 @@
     "counted": "Compté",
     "difference": "Écart",
     "matches": "Juste",
-    "adjustmentRef": "Ajustement"
+    "adjustmentRef": "Ajustement",
+    "tabAccounts": "Comptes",
+    "tabJournal": "Journal",
+    "otherOperations": "Autres opérations (solde d'ouverture, virement, autre entrée)"
   },
   "accountKind": {
     "cash": "Caisse",
@@ -750,12 +762,14 @@
     "newAccount": "Nouveau compte",
     "defaultAccount": "Par défaut",
     "categories": "Catégories de produits",
-    "categoriesHelp": "Métiers des ouvriers et catégories d'articles. Ajoutez de nouveaux produits ici.",
+    "categoriesHelp": "Les produits de l'atelier. Pour l'instant seul le cuivre est actif ; activez « Babouches » ou ajoutez une catégorie quand l'atelier en fabrique.",
     "newCategory": "Nouvelle catégorie",
     "builtIn": "Intégrée",
     "audit": "Journal d'audit",
     "auditHelp": "Qui a créé ou modifié quoi, et quand.",
-    "auditTable": "Table"
+    "auditTable": "Table",
+    "disableCategory": "Désactiver",
+    "enableCategory": "Activer"
   },
   "permissions": {
     "workers_manage": "Gérer les ouvriers",
@@ -847,5 +861,22 @@
     "title": "Un problème est survenu",
     "help": "Rien n'a été modifié. Réessayez ; si le problème continue, notez l'heure et contactez la personne qui gère l'application.",
     "retry": "Réessayer"
+  },
+  "home": {
+    "figures": "En bref",
+    "cash": "Argent disponible",
+    "toPayWorkers": "À payer aux ouvriers",
+    "thisWeek": "cette semaine",
+    "customersOwe": "Les clients doivent",
+    "lateOrders": "Commandes en retard",
+    "todo": "À faire",
+    "nothingToDo": "Rien d'urgent : tout est à jour.",
+    "todoLate": "{count} commande(s) en retard",
+    "todoReady": "{reference} ({customer}) est prête à livrer",
+    "toCollect": "à encaisser",
+    "todoPay": "Paie de la semaine à régler :",
+    "todoDue": "{reference} ({customer}) à livrer le {date}",
+    "moreFigures": "Plus de chiffres",
+    "moreFiguresHelp": "entrées, sorties, ventes et dépenses sur une période"
   }
 }

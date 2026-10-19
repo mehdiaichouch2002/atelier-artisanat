@@ -29,18 +29,18 @@ export interface ShellUser {
   role: "owner" | "manager";
 }
 
-const NAV = [
-  { href: "/", key: "nav.dashboard", icon: Home },
-  { href: "/workers", key: "nav.workers", icon: Users },
-  { href: "/payroll", key: "nav.payroll", icon: CalendarCheck },
-  { href: "/advances", key: "nav.advances", icon: HandCoins },
-  { href: "/orders", key: "nav.orders", icon: ClipboardList },
-  { href: "/customers", key: "nav.customers", icon: UserRound },
-  { href: "/expenses", key: "nav.expenses", icon: Receipt },
-  { href: "/cash", key: "nav.cash", icon: Wallet },
-  { href: "/reports", key: "nav.reports", icon: BarChart3 },
-  { href: "/settings", key: "nav.settings", icon: Settings },
-] as const;
+// Daily work first; management pages in a second, quieter group. Expenses live under "Caisse".
+const NAV: readonly { href: string; key: string; icon: typeof Home; group: "daily" | "manage"; also?: readonly string[] }[] = [
+  { href: "/", key: "nav.dashboard", icon: Home, group: "daily" },
+  { href: "/advances", key: "nav.advances", icon: HandCoins, group: "daily" },
+  { href: "/payroll", key: "nav.payroll", icon: CalendarCheck, group: "daily" },
+  { href: "/orders", key: "nav.orders", icon: ClipboardList, group: "daily" },
+  { href: "/cash", key: "nav.cash", icon: Wallet, group: "daily", also: ["/expenses"] },
+  { href: "/workers", key: "nav.workers", icon: Users, group: "manage" },
+  { href: "/customers", key: "nav.customers", icon: UserRound, group: "manage" },
+  { href: "/reports", key: "nav.reports", icon: BarChart3, group: "manage" },
+  { href: "/settings", key: "nav.settings", icon: Settings, group: "manage" },
+];
 
 const QUICK = [
   { href: "/advances/new", key: "quick.advance", icon: HandCoins },
@@ -50,8 +50,9 @@ const QUICK = [
   { href: "/orders/new", key: "quick.order", icon: ShoppingBag },
 ] as const;
 
-function isActive(pathname: string, href: string) {
-  return href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`);
+function isActive(pathname: string, href: string, also: readonly string[] = []) {
+  if (href === "/") return pathname === "/";
+  return [href, ...also].some((h) => pathname === h || pathname.startsWith(`${h}/`));
 }
 
 export function AppShell({
@@ -102,27 +103,34 @@ export function AppShell({
           </Link>
         </div>
         <nav aria-label={t("nav.main")} className="flex-1 overflow-y-auto px-3">
-          <ul className="space-y-0.5">
-            {NAV.map((item) => {
-              const active = isActive(pathname, item.href);
-              const Icon = item.icon;
-              return (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    aria-current={active ? "page" : undefined}
-                    className={cx(
-                      "flex min-h-10 items-center gap-3 rounded-lg px-3 text-[0.9375rem]",
-                      active ? "bg-primary-soft font-semibold text-primary" : "text-ink-soft hover:bg-sunken hover:text-ink",
-                    )}
-                  >
-                    <Icon className="size-[1.125rem] shrink-0" aria-hidden />
-                    {t(item.key)}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+          {(["daily", "manage"] as const).map((group) => (
+            <div key={group} className={group === "manage" ? "mt-5" : undefined}>
+              {group === "manage" ? (
+                <p className="px-3 pb-1 text-xs font-semibold uppercase tracking-wide text-ink-faint">{t("nav.manage")}</p>
+              ) : null}
+              <ul className="space-y-0.5">
+                {NAV.filter((n) => n.group === group).map((item) => {
+                  const active = isActive(pathname, item.href, item.also);
+                  const Icon = item.icon;
+                  return (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href}
+                        aria-current={active ? "page" : undefined}
+                        className={cx(
+                          "flex min-h-11 items-center gap-3 rounded-lg px-3 text-[0.9375rem]",
+                          active ? "bg-primary-soft font-semibold text-primary" : "text-ink-soft hover:bg-sunken hover:text-ink",
+                        )}
+                      >
+                        <Icon className="size-5 shrink-0" aria-hidden />
+                        {t(item.key)}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ))}
         </nav>
         <div className="space-y-3 border-t border-line p-4">
           <LocaleSwitcher />
@@ -228,10 +236,10 @@ export function AppShell({
               <li key={item.href}>
                 <Link
                   href={item.href}
-                  aria-current={isActive(pathname, item.href) ? "page" : undefined}
+                  aria-current={isActive(pathname, item.href, item.also) ? "page" : undefined}
                   className={cx(
                     "flex min-h-12 items-center gap-2 rounded-lg border px-3",
-                    isActive(pathname, item.href) ? "border-primary bg-primary-soft text-primary" : "border-line",
+                    isActive(pathname, item.href, item.also) ? "border-primary bg-primary-soft text-primary" : "border-line",
                   )}
                 >
                   <item.icon className="size-5" aria-hidden />

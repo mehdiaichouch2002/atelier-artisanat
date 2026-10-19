@@ -60,6 +60,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Searc
     sort: sort === "due" ? undefined : sort,
   };
 
+  const filtersActive = Boolean(search || statusParam !== "open" || overdue || withBalance || categoryId || dueFrom || dueTo || sort !== "due");
   return (
     <>
       <PageHeader
@@ -77,10 +78,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Searc
         }
       />
       <Card>
-        <FilterBar action="/orders" t={t} resetHref="/orders">
-          <FilterField label={t("common.search")} className="grow">
-            <input name="q" defaultValue={search} className={filterInputClass} placeholder={t("orders.searchPlaceholder")} />
-          </FilterField>
+        <FilterBar action="/orders" t={t} resetHref="/orders" search={<input aria-label={t("common.search")} type="search" name="q" defaultValue={search} className={`${filterInputClass} w-full`} placeholder={t("orders.searchPlaceholder")} />} active={filtersActive}>
           <FilterField label={t("fields.status")}>
             <select name="status" defaultValue={statusParam} className={filterInputClass}>
               <option value="open">{t("orders.openStatuses")}</option>
@@ -90,6 +88,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Searc
               ))}
             </select>
           </FilterField>
+          {categories.length > 1 ? (
           <FilterField label={t("fields.category")}>
             <select name="category" defaultValue={categoryId ?? ""} className={filterInputClass}>
               <option value="">{t("common.all")}</option>
@@ -98,6 +97,7 @@ export default async function OrdersPage({ searchParams }: { searchParams: Searc
               ))}
             </select>
           </FilterField>
+          ) : null}
           <FilterField label={t("orders.dueFrom")}>
             <input type="date" name="dueFrom" defaultValue={dueFrom} className={filterInputClass} />
           </FilterField>

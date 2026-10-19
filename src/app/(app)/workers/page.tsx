@@ -10,7 +10,6 @@ import { LinkButton } from "@/components/ui/button";
 import { Money } from "@/components/ui/money";
 import { ActiveBadge, catLabel, categoryLabel } from "@/components/labels";
 import { FilterBar, FilterField, filterInputClass, hrefWith, Pagination, Table, Td, Th } from "@/components/table";
-import { formatDate } from "@/lib/dates";
 import { can } from "@/lib/auth/permissions";
 import { arrangementSummary } from "./arrangement";
 
@@ -32,8 +31,10 @@ export default async function WorkersPage({ searchParams }: { searchParams: Sear
     await listWorkers(tx, { search, status, categoryId, sort, limit: PAGE_SIZE, offset: (page - 1) * PAGE_SIZE }),
     await listCategories(tx),
   ] as const);
+  const showCraft = categories.length > 1;
   const filters = { q: search, status: status === "active" ? undefined : status, craft: categoryId, sort: sort === "name" ? undefined : sort };
 
+  const filtersActive = Boolean(search || status !== "active" || categoryId || sort !== "name");
   return (
     <>
       <PageHeader
@@ -48,10 +49,7 @@ export default async function WorkersPage({ searchParams }: { searchParams: Sear
         }
       />
       <Card>
-        <FilterBar action="/workers" t={t} resetHref="/workers">
-          <FilterField label={t("common.search")} className="grow">
-            <input name="q" defaultValue={search} className={filterInputClass} placeholder={t("workers.searchPlaceholder")} />
-          </FilterField>
+        <FilterBar action="/workers" t={t} resetHref="/workers" search={<input aria-label={t("common.search")} type="search" name="q" defaultValue={search} className={`${filterInputClass} w-full`} placeholder={t("workers.searchPlaceholder")} />} active={filtersActive}>
           <FilterField label={t("fields.status")}>
             <select name="status" defaultValue={status} className={filterInputClass}>
               <option value="active">{t("common.active")}</option>
@@ -59,6 +57,7 @@ export default async function WorkersPage({ searchParams }: { searchParams: Sear
               <option value="all">{t("common.all")}</option>
             </select>
           </FilterField>
+          {showCraft ? (
           <FilterField label={t("fields.craft")}>
             <select name="craft" defaultValue={categoryId ?? ""} className={filterInputClass}>
               <option value="">{t("common.all")}</option>
@@ -69,6 +68,7 @@ export default async function WorkersPage({ searchParams }: { searchParams: Sear
               ))}
             </select>
           </FilterField>
+          ) : null}
           <FilterField label={t("common.sortBy")}>
             <select name="sort" defaultValue={sort} className={filterInputClass}>
               <option value="name">{t("fields.fullName")}</option>
@@ -94,9 +94,8 @@ export default async function WorkersPage({ searchParams }: { searchParams: Sear
               <thead>
                 <tr>
                   <Th>{t("fields.fullName")}</Th>
-                  <Th>{t("fields.craft")}</Th>
+                  {showCraft ? <Th>{t("fields.craft")}</Th> : null}
                   <Th>{t("workers.arrangement")}</Th>
-                  <Th>{t("fields.startDate")}</Th>
                   <Th num>{t("payroll.balanceOwed")}</Th>
                   <Th>{t("fields.status")}</Th>
                 </tr>
@@ -110,11 +109,8 @@ export default async function WorkersPage({ searchParams }: { searchParams: Sear
                       </Link>
                       {w.code ? <span className="ms-2 text-sm text-ink-soft">#{w.code}</span> : null}
                     </Td>
-                    <Td label={t("fields.craft")}>{categoryLabel(w, t)}</Td>
+                    {showCraft ? <Td label={t("fields.craft")}>{categoryLabel(w, t)}</Td> : null}
                     <Td label={t("workers.arrangement")}>{arrangementSummary(w, t)}</Td>
-                    <Td label={t("fields.startDate")}>
-                      <span className="num">{formatDate(w.startDate)}</span>
-                    </Td>
                     <Td label={t("payroll.balanceOwed")} num>
                       <Money cents={w.balanceCents} tone="auto" />
                     </Td>

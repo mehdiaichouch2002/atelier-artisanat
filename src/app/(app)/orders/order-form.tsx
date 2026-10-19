@@ -63,7 +63,16 @@ function LinesEditor({ initial, categories }: { initial: LineState[]; categories
           const id = `line-${l.key}`;
           return (
             <li key={l.key} className="rounded-lg border border-line bg-white p-3">
-              <div className="grid gap-3 lg:grid-cols-[10rem_1fr_6rem_9rem_auto] lg:items-end sm:grid-cols-2">
+              <div
+                className={
+                  categories.length > 1
+                    ? "grid gap-3 sm:grid-cols-2 lg:grid-cols-[10rem_1fr_6rem_9rem_auto] lg:items-end"
+                    : "grid gap-3 sm:grid-cols-2 lg:grid-cols-[1fr_6rem_9rem_auto] lg:items-end"
+                }
+              >
+                {categories.length === 1 ? (
+                  <input type="hidden" name={`lines.${i}.categoryId`} value={l.categoryId || categories[0]!.value} />
+                ) : (
                 <div>
                   <label htmlFor={`${id}-cat`} className="mb-1 block text-sm font-medium">{t("fields.category")}</label>
                   <select
@@ -79,6 +88,7 @@ function LinesEditor({ initial, categories }: { initial: LineState[]; categories
                     ))}
                   </select>
                 </div>
+                )}
                 <div>
                   <label htmlFor={`${id}-desc`} className="mb-1 block text-sm font-medium">
                     {t("fields.description")} <span className="text-bad" aria-hidden>*</span>
@@ -193,7 +203,7 @@ export function OrderForm({
     <ActionForm action={action} className="space-y-6">
       {order ? <input type="hidden" name="id" value={order.id} /> : null}
       <fieldset className="grid gap-4 sm:grid-cols-2">
-        <legend className="mb-2 text-base font-semibold">{t("orders.customerAndDates")}</legend>
+        <legend className="mb-2 text-base font-semibold">{t("orders.customerAndDelivery")}</legend>
         {newCustomer && !order ? (
           <>
             <TextField name="newCustomerName" label={t("fields.customerName")} required />
@@ -215,34 +225,7 @@ export function OrderForm({
             </Button>
           </div>
         ) : null}
-        <TextField name="orderDate" type="date" label={t("fields.orderDate")} required defaultValue={order?.orderDate ?? today} />
         <TextField name="dueDate" type="date" label={t("fields.dueDate")} defaultValue={order?.dueDate} />
-        <SelectField
-          name="priority"
-          label={t("fields.priority")}
-          required
-          defaultValue={order?.priority ?? "normal"}
-          options={ORDER_PRIORITIES.map((p) => ({ value: p, label: t(`priority.${p}`) }))}
-        />
-        <SelectField
-          name="assignedWorkerId"
-          label={t("fields.assignedWorker")}
-          options={workers}
-          placeholder={t("common.none")}
-          defaultValue={order?.assignedWorkerId}
-        />
-        {!order ? (
-          <SelectField
-            name="status"
-            label={t("fields.status")}
-            required
-            defaultValue="confirmed"
-            options={[
-              { value: "quote", label: t("orderStatus.quote") },
-              { value: "confirmed", label: t("orderStatus.confirmed") },
-            ]}
-          />
-        ) : null}
       </fieldset>
 
       {linesEditable ? (
@@ -251,19 +234,50 @@ export function OrderForm({
         <p className="rounded-lg bg-sunken p-3 text-sm text-ink-soft">{t("orders.linesLocked")}</p>
       )}
 
-      {!order ? (
-        <fieldset className="grid gap-4 rounded-lg border border-line p-4 sm:grid-cols-3">
-          <legend className="px-1 text-base font-semibold">{t("orders.depositOptional")}</legend>
-          <MoneyField name="deposit" label={t("orders.depositReceived")} hint={t("orders.depositHint")} />
-          <SelectField name="depositAccountId" label={t("fields.account")} options={accounts} defaultValue={defaultAccountId} />
-          <SelectField name="depositMethod" label={t("fields.method")} options={methods} defaultValue="cash" />
-        </fieldset>
-      ) : null}
+      {!order ? <MoneyField name="deposit" label={t("orders.depositReceived")} hint={t("orders.depositHint")} wrapperClassName="sm:max-w-xs" /> : null}
 
-      <TextAreaField name="notes" label={t("fields.notes")} defaultValue={order?.notes} />
-      {!order ? (
-        <TextField name="attachment" type="file" label={t("fields.attachment")} accept="image/jpeg,image/png,image/webp,application/pdf" hint={t("fields.attachmentHint")} />
-      ) : null}
+      <details className="rounded-lg border border-line p-3" open={order && (order.notes || order.assignedWorkerId) ? true : undefined}>
+        <summary className="cursor-pointer text-sm font-medium">{t("common.moreOptions")}</summary>
+        <div className="mt-3 grid gap-4 sm:grid-cols-2">
+          <TextField name="orderDate" type="date" label={t("fields.orderDate")} required defaultValue={order?.orderDate ?? today} />
+          <SelectField
+            name="priority"
+            label={t("fields.priority")}
+            required
+            defaultValue={order?.priority ?? "normal"}
+            options={ORDER_PRIORITIES.map((p) => ({ value: p, label: t(`priority.${p}`) }))}
+          />
+          <SelectField
+            name="assignedWorkerId"
+            label={t("fields.assignedWorker")}
+            options={workers}
+            placeholder={t("common.none")}
+            defaultValue={order?.assignedWorkerId}
+          />
+          {!order ? (
+            <SelectField
+              name="status"
+              label={t("fields.status")}
+              required
+              defaultValue="confirmed"
+              options={[
+                { value: "quote", label: t("orderStatus.quote") },
+                { value: "confirmed", label: t("orderStatus.confirmed") },
+              ]}
+            />
+          ) : null}
+          {!order ? (
+            <>
+              <SelectField name="depositAccountId" label={t("orders.depositAccount")} options={accounts} defaultValue={defaultAccountId} />
+              <SelectField name="depositMethod" label={t("fields.method")} options={methods} defaultValue="cash" />
+            </>
+          ) : null}
+          <TextAreaField name="notes" label={t("fields.notes")} defaultValue={order?.notes} wrapperClassName="sm:col-span-2" />
+          {!order ? (
+            <TextField name="attachment" type="file" label={t("fields.attachment")} accept="image/jpeg,image/png,image/webp,application/pdf" hint={t("fields.attachmentHint")} />
+          ) : null}
+        </div>
+      </details>
       <SubmitButton size="lg">{order ? t("common.saveChanges") : t("orders.create")}</SubmitButton>
     </ActionForm>
   );

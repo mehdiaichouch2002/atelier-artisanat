@@ -6,6 +6,7 @@ import { accountBalances, listEntries } from "@/domain/ledger/service";
 import { getSettings } from "@/domain/settings/service";
 import { ENTRY_TYPES, type EntryType } from "@/domain/ledger/logic";
 import { periodBounds, resolvePeriod } from "@/lib/dates";
+import { CashTabs } from "@/components/cash-tabs";
 import { Card, EmptyState, PageHeader } from "@/components/ui/card";
 import { LinkButton } from "@/components/ui/button";
 import { PeriodPicker } from "@/components/period";
@@ -49,6 +50,7 @@ export default async function LedgerPage({ searchParams }: { searchParams: Searc
     from: !allTime && data.period.key === "custom" ? data.period.from : undefined,
     to: !allTime && data.period.key === "custom" ? data.period.to : undefined,
   };
+  const filtersActive = Boolean(type || accountId || search);
   return (
     <>
       <PageHeader
@@ -63,6 +65,7 @@ export default async function LedgerPage({ searchParams }: { searchParams: Searc
           </LinkButton>
         }
       />
+      <CashTabs current="ledger" t={t} />
       <div className="mb-4 flex flex-wrap items-center gap-3">
         <PeriodPicker period={data.period} basePath="/cash/ledger" keep={{ type, account: accountId, worker: workerId, customer: customerId, q: search }} t={t} />
         {!allTime ? (
@@ -74,15 +77,12 @@ export default async function LedgerPage({ searchParams }: { searchParams: Searc
         )}
       </div>
       <Card>
-        <FilterBar action="/cash/ledger" t={t} resetHref="/cash/ledger">
+        <FilterBar action="/cash/ledger" t={t} resetHref="/cash/ledger" search={<input aria-label={t("common.search")} type="search" name="q" defaultValue={search} className={`${filterInputClass} w-full`} placeholder={t("ledger.searchPlaceholder")} />} active={filtersActive}>
           {keep.period ? <input type="hidden" name="period" value={keep.period} /> : null}
           {keep.from ? <input type="hidden" name="from" value={keep.from} /> : null}
           {keep.to ? <input type="hidden" name="to" value={keep.to} /> : null}
           {workerId ? <input type="hidden" name="worker" value={workerId} /> : null}
           {customerId ? <input type="hidden" name="customer" value={customerId} /> : null}
-          <FilterField label={t("common.search")} className="grow">
-            <input name="q" defaultValue={search} className={filterInputClass} placeholder={t("ledger.searchPlaceholder")} />
-          </FilterField>
           <FilterField label={t("fields.type")}>
             <select name="type" defaultValue={type ?? ""} className={filterInputClass}>
               <option value="">{t("common.all")}</option>

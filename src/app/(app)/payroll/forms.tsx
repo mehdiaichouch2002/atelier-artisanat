@@ -7,7 +7,6 @@ import {
   MoneyField,
   SelectField,
   SubmitButton,
-  TextAreaField,
   TextField,
 } from "@/components/forms";
 import { Notice } from "@/components/ui/card";
@@ -103,11 +102,16 @@ export function PaymentForm({ ctx, onDone }: { ctx: PayContext; onDone?: () => v
           defaultValue={suggested != null ? centsToInput(suggested) : ""}
           hint={suggested != null ? t("payroll.remainingHint", { amount: formatMoney(ctx.remainingCents) }) : undefined}
         />
-        <TextField name="occurredAt" type="datetime-local" label={t("fields.dateTime")} required defaultValue={ctx.nowLocal} />
-        <SelectField name="accountId" label={t("fields.account")} required options={ctx.accounts} defaultValue={ctx.defaultAccountId} />
-        <SelectField name="method" label={t("fields.method")} required options={methods} defaultValue="cash" />
+        <TextField name="note" label={t("fields.note")} />
       </div>
-      <TextAreaField name="note" label={t("fields.note")} rows={2} />
+      <details className="rounded-lg border border-line p-3">
+        <summary className="cursor-pointer text-sm font-medium">{t("common.moreOptions")}</summary>
+        <div className="mt-3 grid gap-4 sm:grid-cols-2">
+          <TextField name="occurredAt" type="datetime-local" label={t("fields.dateTime")} required defaultValue={ctx.nowLocal} />
+          <SelectField name="accountId" label={t("fields.account")} required options={ctx.accounts} defaultValue={ctx.defaultAccountId} />
+          <SelectField name="method" label={t("fields.method")} required options={methods} defaultValue="cash" />
+        </div>
+      </details>
       <SubmitButton size="lg" className="w-full sm:w-auto">
         {t("payroll.savePayment")}
       </SubmitButton>

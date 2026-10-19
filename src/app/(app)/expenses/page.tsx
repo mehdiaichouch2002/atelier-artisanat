@@ -6,6 +6,7 @@ import { allEntries, listEntries } from "@/domain/ledger/service";
 import { getSettings } from "@/domain/settings/service";
 import { EXPENSE_CATEGORIES, expensesByCategory } from "@/domain/ledger/logic";
 import { periodBounds, resolvePeriod } from "@/lib/dates";
+import { CashTabs } from "@/components/cash-tabs";
 import { Card, CardHeader, EmptyState, PageHeader } from "@/components/ui/card";
 import { LinkButton } from "@/components/ui/button";
 import { Money } from "@/components/ui/money";
@@ -44,6 +45,7 @@ export default async function ExpensesPage({ searchParams }: { searchParams: Sea
     from: data.period.key === "custom" ? data.period.from : undefined,
     to: data.period.key === "custom" ? data.period.to : undefined,
   };
+  const filtersActive = Boolean(category || search);
   return (
     <>
       <PageHeader
@@ -51,6 +53,7 @@ export default async function ExpensesPage({ searchParams }: { searchParams: Sea
         description={t("expenses.description")}
         actions={<LinkButton href="/expenses/new"><Plus className="size-4" aria-hidden /> {t("expenses.new")}</LinkButton>}
       />
+      <CashTabs current="expenses" t={t} />
       <div className="mb-4">
         <PeriodPicker period={data.period} basePath="/expenses" keep={{ category, q: search }} t={t} />
       </div>
@@ -75,7 +78,7 @@ export default async function ExpensesPage({ searchParams }: { searchParams: Sea
           )}
         </Card>
         <Card className="lg:col-span-2">
-          <FilterBar action="/expenses" t={t} resetHref="/expenses">
+          <FilterBar action="/expenses" t={t} resetHref="/expenses" search={<input aria-label={t("common.search")} type="search" name="q" defaultValue={search} className={`${filterInputClass} w-full`} placeholder={t("ledger.searchPlaceholder")} />} active={filtersActive}>
             <input type="hidden" name="period" value={data.period.key} />
             {data.period.key === "custom" ? (
               <>
@@ -83,9 +86,6 @@ export default async function ExpensesPage({ searchParams }: { searchParams: Sea
                 <input type="hidden" name="to" value={data.period.to} />
               </>
             ) : null}
-            <FilterField label={t("common.search")} className="grow">
-              <input name="q" defaultValue={search} className={filterInputClass} placeholder={t("ledger.searchPlaceholder")} />
-            </FilterField>
             <FilterField label={t("fields.category")}>
               <select name="category" defaultValue={category ?? ""} className={filterInputClass}>
                 <option value="">{t("common.all")}</option>

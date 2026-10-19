@@ -17,7 +17,8 @@
     "expenses": "Gastos",
     "cash": "Caja",
     "reports": "Informes",
-    "settings": "Ajustes"
+    "settings": "Ajustes",
+    "manage": "Gestión"
   },
   "quick": {
     "title": "Registro rápido",
@@ -62,7 +63,8 @@
     "searchPlaceholder": "Escriba para buscar…",
     "seeAll": "Ver todo",
     "skipToContent": "Ir al contenido",
-    "sortBy": "Ordenar por"
+    "sortBy": "Ordenar por",
+    "filters": "Filtros"
   },
   "auth": {
     "signIn": "Iniciar sesión",
@@ -337,7 +339,8 @@
     "advancesThisWeek": "Msrouf de la semana",
     "paymentsThisWeek": "Pagos de la semana",
     "noPayments": "No hay pagos para esta semana",
-    "pendingAdvances": "Msrouf por descontar (pago no confirmado)"
+    "pendingAdvances": "Msrouf por descontar (pago no confirmado)",
+    "alreadyGiven": "Ya entregado esta semana"
   },
   "weekStatus": {
     "empty": "Nada",
@@ -372,7 +375,11 @@
     "businessAdvances": "Dinero para compras del taller",
     "businessHelp": "Se cuentan como gastos, nunca se descuentan del pago.",
     "totalCashOut": "Total salido de caja",
-    "empty": "No hay msrouf en este periodo"
+    "empty": "No hay msrouf en este periodo",
+    "whoReceives": "¿Quién recibe el dinero?",
+    "quickAmounts": "Elegir un importe rápido",
+    "whatFor": "¿Para qué es?",
+    "notePlaceholder": "P. ej. comida, transporte…"
   },
   "advanceCategory": {
     "daily": "Anticipo del día",
@@ -384,7 +391,7 @@
     "wage": "Anticipo de salario",
     "wageHelp": "Se descontará del pago de la semana.",
     "business": "Gasto del taller",
-    "businessHelp": "Dinero para el taller (p. ej. compra de cuero). No reduce el pago."
+    "businessHelp": "Dinero para el taller (p. ej. compra de cobre). No reduce el pago."
   },
   "orders": {
     "description": "Pedidos de los clientes, de la negociación a la entrega.",
@@ -409,7 +416,7 @@
     "newCustomerInline": "+ Nuevo cliente",
     "pickExistingCustomer": "Elegir un cliente existente",
     "lines": "Artículos",
-    "linePlaceholder": "P. ej. Babuchas de cuero amarillo, talla 42",
+    "linePlaceholder": "P. ej. Bandeja de cobre cincelado 60 cm",
     "addLine": "Añadir artículo",
     "removeLine": "Eliminar el artículo {n}",
     "linesLocked": "La producción ha empezado: el precio ya no se edita aquí. Use un descuento o recargo documentado en el pedido.",
@@ -452,7 +459,9 @@
     "noAttachments": "Sin documentos",
     "upload": "Añadir",
     "attachmentSaved": "Documento añadido.",
-    "quickPaymentHelp": "Elija el pedido e introduzca el importe recibido."
+    "quickPaymentHelp": "Elija el pedido e introduzca el importe recibido.",
+    "customerAndDelivery": "Cliente y entrega",
+    "depositAccount": "Cuenta del anticipo"
   },
   "orderStatus": {
     "quote": "Presupuesto / por confirmar",
@@ -572,7 +581,10 @@
     "counted": "Contado",
     "difference": "Diferencia",
     "matches": "Cuadra",
-    "adjustmentRef": "Ajuste"
+    "adjustmentRef": "Ajuste",
+    "tabAccounts": "Cuentas",
+    "tabJournal": "Diario",
+    "otherOperations": "Otras operaciones (saldo inicial, transferencia, otra entrada)"
   },
   "accountKind": {
     "cash": "Caja",
@@ -750,12 +762,14 @@
     "newAccount": "Nueva cuenta",
     "defaultAccount": "Predeterminada",
     "categories": "Categorías de productos",
-    "categoriesHelp": "Oficios de los trabajadores y categorías de artículos. Añada aquí nuevos productos.",
+    "categoriesHelp": "Los productos del taller. Por ahora solo el cobre está activo; active «Babuchas» o añada una categoría cuando el taller los fabrique.",
     "newCategory": "Nueva categoría",
     "builtIn": "Integrada",
     "audit": "Registro de auditoría",
     "auditHelp": "Quién creó o modificó qué, y cuándo.",
-    "auditTable": "Tabla"
+    "auditTable": "Tabla",
+    "disableCategory": "Desactivar",
+    "enableCategory": "Activar"
   },
   "permissions": {
     "workers_manage": "Gestionar trabajadores",
@@ -847,5 +861,22 @@
     "title": "Algo ha fallado",
     "help": "No se ha modificado nada. Inténtelo de nuevo; si el problema continúa, anote la hora y contacte con la persona que gestiona la aplicación.",
     "retry": "Reintentar"
+  },
+  "home": {
+    "figures": "En resumen",
+    "cash": "Dinero disponible",
+    "toPayWorkers": "Por pagar a los trabajadores",
+    "thisWeek": "esta semana",
+    "customersOwe": "Los clientes deben",
+    "lateOrders": "Pedidos atrasados",
+    "todo": "Pendiente",
+    "nothingToDo": "Nada urgente: todo está al día.",
+    "todoLate": "{count} pedido(s) atrasado(s)",
+    "todoReady": "{reference} ({customer}) está listo para entregar",
+    "toCollect": "por cobrar",
+    "todoPay": "Pago semanal por liquidar:",
+    "todoDue": "{reference} ({customer}) a entregar el {date}",
+    "moreFigures": "Más cifras",
+    "moreFiguresHelp": "entradas, salidas, ventas y gastos en un periodo"
   }
 }

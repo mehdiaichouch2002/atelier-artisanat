@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { BookOpen } from "lucide-react";
 import { pageContext } from "@/lib/page";
 import { getI18n } from "@/i18n/server";
 import { accountBalances, listCashCounts } from "@/domain/ledger/service";
+import { CashTabs } from "@/components/cash-tabs";
 import { Card, CardHeader, EmptyState, PageHeader } from "@/components/ui/card";
 import { LinkButton } from "@/components/ui/button";
 import { Money } from "@/components/ui/money";
@@ -31,12 +31,8 @@ export default async function CashPage() {
       <PageHeader
         title={t("nav.cash")}
         description={t("cash.description")}
-        actions={
-          <LinkButton href="/cash/ledger" variant="secondary">
-            <BookOpen className="size-4" aria-hidden /> {t("ledger.title")}
-          </LinkButton>
-        }
       />
+      <CashTabs current="cash" t={t} />
       <section aria-label={t("cash.accounts")} className="mb-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {accounts.map((a) => (
           <Link key={a.accountId} href={`/cash/ledger?account=${a.accountId}`} className="card block p-4 hover:border-primary">
@@ -47,19 +43,24 @@ export default async function CashPage() {
             <div className="mt-2 text-2xl font-semibold"><Money cents={a.balanceCents} tone="auto" /></div>
           </Link>
         ))}
+        {accounts.length > 1 ? (
         <div className="card bg-primary-soft p-4">
           <div className="text-sm text-primary">{t("cash.totalCalculated")}</div>
           <div className="mt-2 text-2xl font-semibold text-primary"><Money cents={total} /></div>
           <p className="mt-1 text-xs text-ink-soft">{t("cash.calculatedHelp")}</p>
         </div>
+        ) : null}
       </section>
 
-      <Card className="mb-4">
-        <CardHeader title={t("cash.actions")} />
-        <div className="flex flex-wrap gap-2 p-4">
-          <Dialog trigger={t("cash.countCash")} title={t("cash.countCash")} triggerVariant="primary">
-            <CashCountForm accounts={options} defaultAccountId={defaultAccountId} canAdjust={can(user.role, "cash.adjust")} />
-          </Dialog>
+      <div className="mb-4 flex flex-wrap gap-2">
+        <LinkButton href="/expenses/new">{t("quick.expense")}</LinkButton>
+        <Dialog trigger={t("cash.countCash")} title={t("cash.countCash")} triggerVariant="secondary">
+          <CashCountForm accounts={options} defaultAccountId={defaultAccountId} canAdjust={can(user.role, "cash.adjust")} />
+        </Dialog>
+      </div>
+      <details className="card mb-4">
+        <summary className="cursor-pointer px-4 py-3 text-sm font-medium text-primary">{t("cash.otherOperations")}</summary>
+        <div className="flex flex-wrap gap-2 border-t border-line p-4">
           <Dialog trigger={t("cash.otherIncome")} title={t("cash.otherIncome")}>
             <SimpleEntryForm type="other_income" accounts={options} defaultAccountId={defaultAccountId} nowLocal={now} />
           </Dialog>
@@ -77,7 +78,7 @@ export default async function CashPage() {
             <LinkButton href="/settings#accounts" variant="ghost">{t("cash.manageAccounts")}</LinkButton>
           ) : null}
         </div>
-      </Card>
+      </details>
 
       <Card>
         <CardHeader title={t("cash.reconciliation")} description={t("cash.reconciliationHelp")} />

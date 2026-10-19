@@ -1,6 +1,6 @@
 // Scenario A — worker, msrouf on Monday and later in the week, partial then final settlement.
 import { expect, test } from "@playwright/test";
-import { addDays, cents, fmtDate, localDate, login, mondayOf, unique } from "./fixtures";
+import { moreOptions, addDays, cents, fmtDate, localDate, login, mondayOf, unique } from "./fixtures";
 
 test("worker weekly settlement with advances and partial payments", async ({ page }) => {
   await login(page);
@@ -24,6 +24,7 @@ test("worker weekly settlement with advances and partial payments", async ({ pag
   ] as const) {
     await page.goto(`/advances/new?worker=${workerId}`);
     await page.getByLabel(/^Montant/).fill(amount);
+    await moreOptions(page);
     await page.getByLabel(/^Date et heure/).fill(`${date}T09:30`);
     await page.getByRole("button", { name: "Enregistrer le msrouf" }).click();
     await expect(page.getByText(`semaine du ${fmtDate(week)}`)).toBeVisible();

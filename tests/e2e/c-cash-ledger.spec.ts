@@ -1,7 +1,7 @@
 // Scenario C — opening balance, customer payment, advance, settlement and expense; cash effects,
 // no double counting of advances, reconciliation and reports.
 import { expect, test, type Page } from "@playwright/test";
-import { addDays, cents, localDate, login, mondayOf, unique } from "./fixtures";
+import { moreOptions, addDays, cents, localDate, login, mondayOf, unique } from "./fixtures";
 
 async function cashBalance(page: Page): Promise<number> {
   await page.goto("/cash");
@@ -23,6 +23,7 @@ test("cash effects of every movement type and reconciliation", async ({ page }) 
 
   // Opening balance 5 000 DH (owner only).
   await page.goto("/cash");
+  await page.getByText("Autres opérations").click();
   await page.getByRole("button", { name: "Solde d'ouverture" }).click();
   let dialog = page.getByRole("dialog", { name: "Solde d'ouverture" });
   await dialog.getByLabel(/^Montant/).fill("5000");
@@ -53,6 +54,7 @@ test("cash effects of every movement type and reconciliation", async ({ page }) 
   const week = mondayOf(addDays(today, -7));
   await page.goto(`/advances/new?worker=${workerId}`);
   await page.getByLabel(/^Montant/).fill("300");
+  await moreOptions(page);
   await page.getByLabel(/^Date et heure/).fill(`${week}T10:00`);
   await page.getByRole("button", { name: "Enregistrer le msrouf" }).click();
   await expect(page.getByText("enregistrée sur la semaine", { exact: false })).toBeVisible();

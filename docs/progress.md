@@ -27,6 +27,22 @@ npm audit --omit=dev → found 0 vulnerabilities
 `npm audit` (including dev tooling) reports 5 high-severity advisories in `braces`, pulled in by lint/test
 tooling only (not shipped to the server or browser). The fix requires a breaking `--force` upgrade; left as is.
 
+## Simplification pass (owner feedback: "too complicated")
+
+- Home: big action buttons, 4 key numbers, one "À faire" list; detailed period figures folded.
+- Navigation: daily work (Accueil, Msrouf, Paie, Commandes, Caisse) separated from management (Ouvriers,
+  Clients, Rapports, Réglages); Dépenses moved under Caisse (tabs Comptes / Dépenses / Journal).
+- Msrouf: tap a worker, tap or type an amount, choose "à déduire de la paie" or "achat pour l'atelier"; all the
+  rest pre-filled under "Plus d'options". Same approach for payments, orders, workers, customers, expenses.
+- Weekly pay: one line per worker with the amount still to pay and a Pay button.
+- Lists: search box only, filters folded. Cash: rare owner operations folded.
+- Products: Cuivre only by default (migration `0003_copper_only.sql`); built-in categories can be switched on/off
+  in Réglages; category fields are hidden while only one category is active.
+- Data: `npm run db:seed` = 5 copper workers with no money movements; `npm run db:reset` (confirmed by typing
+  EFFACER) erases business data; the old rich demo is `npm run db:seed:full`.
+- Verified after the change: lint 0, type check 0, 95 unit/integration tests, 16 end-to-end tests (A–F incl.
+  axe accessibility in fr/ar) all passing.
+
 ## Not done / blockers
 
 - **Deployment: blocked — no hosting or database credentials were provided** (no Vercel/Supabase/VPS access in

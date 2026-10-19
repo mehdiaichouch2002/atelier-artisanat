@@ -23,24 +23,13 @@ export function WorkerForm({
   return (
     <ActionForm action={action} className="space-y-6">
       {worker ? <input type="hidden" name="id" value={worker.id} /> : null}
-      <fieldset className="grid gap-4 sm:grid-cols-2">
-        <legend className="mb-2 text-base font-semibold">{t("workers.identity")}</legend>
+      <div className="grid gap-4 sm:grid-cols-2">
         <TextField name="fullName" label={t("fields.fullName")} required defaultValue={worker?.fullName} autoComplete="off" />
-        <TextField name="code" label={t("fields.workerCode")} defaultValue={worker?.code} hint={t("workers.codeHint")} />
         <TextField name="phone" type="tel" label={t("fields.phone")} defaultValue={worker?.phone} dir="ltr" />
-        <SelectField
-          name="categoryId"
-          label={t("fields.craft")}
-          options={categories}
-          placeholder={t("common.none")}
-          defaultValue={worker?.categoryId}
-        />
-        <TextField name="startDate" type="date" label={t("fields.startDate")} required defaultValue={worker?.startDate ?? today} />
-      </fieldset>
+      </div>
 
       <fieldset className="grid gap-4 sm:grid-cols-2">
         <legend className="mb-1 text-base font-semibold">{t("workers.arrangement")}</legend>
-        <p className="text-sm text-ink-soft sm:col-span-2">{t("workers.arrangementHelp")}</p>
         <SelectField
           name="payKind"
           label={t("fields.payKind")}
@@ -71,7 +60,24 @@ export function WorkerForm({
         {kind === "negotiated" ? <p className="self-end text-sm text-ink-soft">{t("workers.negotiatedHelp")}</p> : null}
       </fieldset>
 
-      <TextAreaField name="notes" label={t("fields.notes")} defaultValue={worker?.notes} />
+      {categories.length === 1 ? <input type="hidden" name="categoryId" value={worker?.categoryId ?? categories[0]!.value} /> : null}
+      <details className="rounded-lg border border-line p-3" open={worker && (worker.code || worker.notes) ? true : undefined}>
+        <summary className="cursor-pointer text-sm font-medium">{t("common.moreOptions")}</summary>
+        <div className="mt-3 grid gap-4 sm:grid-cols-2">
+          <TextField name="code" label={t("fields.workerCode")} defaultValue={worker?.code} hint={t("workers.codeHint")} />
+          {categories.length !== 1 ? (
+            <SelectField
+              name="categoryId"
+              label={t("fields.craft")}
+              options={categories}
+              placeholder={t("common.none")}
+              defaultValue={worker?.categoryId}
+            />
+          ) : null}
+          <TextField name="startDate" type="date" label={t("fields.startDate")} required defaultValue={worker?.startDate ?? today} />
+          <TextAreaField name="notes" label={t("fields.notes")} defaultValue={worker?.notes} wrapperClassName="sm:col-span-2" />
+        </div>
+      </details>
       <div className="flex flex-wrap gap-2">
         <SubmitButton>{worker ? t("common.saveChanges") : t("workers.create")}</SubmitButton>
       </div>

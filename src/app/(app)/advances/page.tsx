@@ -52,6 +52,7 @@ export default async function AdvancesPage({ searchParams }: { searchParams: Sea
     to: data.period.key === "custom" ? data.period.to : undefined,
   };
 
+  const filtersActive = Boolean(workerId || category || search);
   return (
     <>
       <PageHeader
@@ -83,7 +84,7 @@ export default async function AdvancesPage({ searchParams }: { searchParams: Sea
         </div>
       </div>
       <Card>
-        <FilterBar action="/advances" t={t} resetHref="/advances">
+        <FilterBar action="/advances" t={t} resetHref="/advances" search={<input aria-label={t("common.search")} type="search" name="q" defaultValue={search} className={`${filterInputClass} w-full`} placeholder={t("ledger.searchPlaceholder")} />} active={filtersActive}>
           <input type="hidden" name="period" value={data.period.key} />
           {data.period.key === "custom" ? (
             <>
@@ -91,9 +92,6 @@ export default async function AdvancesPage({ searchParams }: { searchParams: Sea
               <input type="hidden" name="to" value={data.period.to} />
             </>
           ) : null}
-          <FilterField label={t("common.search")} className="grow">
-            <input name="q" defaultValue={search} className={filterInputClass} placeholder={t("ledger.searchPlaceholder")} />
-          </FilterField>
           <FilterField label={t("fields.worker")}>
             <select name="worker" defaultValue={workerId ?? ""} className={filterInputClass}>
               <option value="">{t("common.all")}</option>

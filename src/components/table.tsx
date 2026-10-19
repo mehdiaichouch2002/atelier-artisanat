@@ -94,21 +94,44 @@ export function hrefWith(path: string, params: Record<string, string | number | 
   return s ? `${path}?${s}` : path;
 }
 
-/** GET filter bar (works without JavaScript). */
-export function FilterBar({ children, action, t, resetHref }: { children: React.ReactNode; action: string; t: TFunction; resetHref?: string }) {
+/**
+ * GET filter bar (works without JavaScript): the search box is always visible, the other filters are
+ * folded under "Filtres" so lists stay simple. The fold opens automatically when a filter is active.
+ */
+export function FilterBar({
+  children,
+  search,
+  action,
+  t,
+  resetHref,
+  active,
+}: {
+  children?: React.ReactNode;
+  search?: React.ReactNode;
+  action: string;
+  t: TFunction;
+  resetHref?: string;
+  active?: boolean;
+}) {
   return (
-    <form action={action} method="get" role="search" className="no-print flex flex-wrap items-end gap-3 border-b border-line px-4 py-3">
-      {children}
-      <div className="flex gap-2">
+    <form action={action} method="get" role="search" className="no-print border-b border-line px-4 py-3">
+      <div className="flex flex-wrap items-end gap-2">
+        {search ? <div className="min-w-48 grow">{search}</div> : null}
         <button type="submit" className="min-h-10 rounded-lg bg-primary px-4 text-sm font-medium text-white hover:bg-primary-hover">
-          {t("common.filter")}
+          {search ? t("common.search") : t("common.filter")}
         </button>
-        {resetHref ? (
+        {resetHref && active ? (
           <Link href={resetHref} className="inline-flex min-h-10 items-center rounded-lg px-3 text-sm text-ink-soft hover:bg-sunken">
             {t("common.reset")}
           </Link>
         ) : null}
       </div>
+      {children ? (
+        <details className="mt-2" open={active || undefined}>
+          <summary className="cursor-pointer text-sm font-medium text-primary">{t("common.filters")}</summary>
+          <div className="mt-2 flex flex-wrap items-end gap-3">{children}</div>
+        </details>
+      ) : null}
     </form>
   );
 }

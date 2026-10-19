@@ -55,6 +55,24 @@ export function CategoryRowForm({ id, name, active }: { id: string; name: string
   );
 }
 
+/** Built-in categories keep their translated name; only their availability can change. */
+export function BuiltInCategoryForm({ id, name, label, active }: { id: string; name: string; label: string; active: boolean }) {
+  const { t } = useI18n();
+  return (
+    <ActionForm action={updateCategoryAction} className="flex flex-wrap items-center justify-between gap-3">
+      <input type="hidden" name="id" value={id} />
+      <input type="hidden" name="name" value={name} />
+      <input type="hidden" name="active" value={active ? "" : "on"} />
+      <span className="font-medium">
+        {label} <span className={active ? "text-sm text-ok" : "text-sm text-ink-soft"}>· {active ? t("common.active") : t("common.inactive")}</span>
+      </span>
+      <SubmitButton variant={active ? "secondary" : "primary"} size="sm">
+        {active ? t("settings.disableCategory") : t("settings.enableCategory")}
+      </SubmitButton>
+    </ActionForm>
+  );
+}
+
 export function NewAccountForm() {
   const { t } = useI18n();
   return (

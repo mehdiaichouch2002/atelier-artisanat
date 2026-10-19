@@ -17,7 +17,8 @@
     "expenses": "المصاريف",
     "cash": "الصندوق",
     "reports": "التقارير",
-    "settings": "الإعدادات"
+    "settings": "الإعدادات",
+    "manage": "التسيير"
   },
   "quick": {
     "title": "تسجيل سريع",
@@ -62,7 +63,8 @@
     "searchPlaceholder": "كتب باش تقلب…",
     "seeAll": "شوف الكل",
     "skipToContent": "انتقل إلى المحتوى",
-    "sortBy": "ترتيب حسب"
+    "sortBy": "ترتيب حسب",
+    "filters": "الفلاتر"
   },
   "auth": {
     "signIn": "تسجيل الدخول",
@@ -337,7 +339,8 @@
     "advancesThisWeek": "مصروف السيمانة",
     "paymentsThisWeek": "أداءات السيمانة",
     "noPayments": "ما كاين حتى خلاص فهاد السيمانة",
-    "pendingAdvances": "مصروف خاصو يتنقص (الخلصة ما تأكداتش)"
+    "pendingAdvances": "مصروف خاصو يتنقص (الخلصة ما تأكداتش)",
+    "alreadyGiven": "اللي تعطى هاد السيمانة"
   },
   "weekStatus": {
     "empty": "والو",
@@ -372,7 +375,11 @@
     "businessAdvances": "فلوس لمشتريات الورشة",
     "businessHelp": "كتحسب فالمصاريف، وعمرها ما كتنقص من الخلصة.",
     "totalCashOut": "مجموع اللي خرج من الصندوق",
-    "empty": "ما كاين حتى مصروف فهاد المدة"
+    "empty": "ما كاين حتى مصروف فهاد المدة",
+    "whoReceives": "شكون غادي ياخد الفلوس؟",
+    "quickAmounts": "اختار مبلغ سريع",
+    "whatFor": "على قبل شنو؟",
+    "notePlaceholder": "مثلا الماكلة، النقل…"
   },
   "advanceCategory": {
     "daily": "مصروف النهار",
@@ -384,7 +391,7 @@
     "wage": "تسبيق على الخلصة",
     "wageHelp": "غادي ينقص من خلصة السيمانة.",
     "business": "مصروف ديال الورشة",
-    "businessHelp": "فلوس للورشة (مثلا شرا الجلد). ما كتنقصش من الخلصة."
+    "businessHelp": "فلوس للورشة (مثلا شرا النحاس). ما كتنقصش من الخلصة."
   },
   "orders": {
     "description": "طلبيات الزبناء، من المفاوضة حتى التسليم.",
@@ -409,7 +416,7 @@
     "newCustomerInline": "+ زبون جديد",
     "pickExistingCustomer": "اختار زبون موجود",
     "lines": "السلع",
-    "linePlaceholder": "مثلا بلغة جلد صفرا، القياس 42",
+    "linePlaceholder": "مثلا صينية نحاس منقوشة 60 سم",
     "addLine": "زيد سلعة",
     "removeLine": "حيد السلعة {n}",
     "linesLocked": "الإنتاج بدا: الثمن ما بقاش كيتبدل هنا. استعمل تخفيض أو زيادة موثقة فالطلبية.",
@@ -452,7 +459,9 @@
     "noAttachments": "ما كاينة حتى وثيقة",
     "upload": "زيد",
     "attachmentSaved": "الوثيقة تزادت.",
-    "quickPaymentHelp": "اختار الطلبية ودخل المبلغ اللي توصلتي به."
+    "quickPaymentHelp": "اختار الطلبية ودخل المبلغ اللي توصلتي به.",
+    "customerAndDelivery": "الزبون والتسليم",
+    "depositAccount": "حساب العربون"
   },
   "orderStatus": {
     "quote": "عرض ثمن / خاصو تأكيد",
@@ -572,7 +581,10 @@
     "counted": "المعدود",
     "difference": "الفرق",
     "matches": "مطابق",
-    "adjustmentRef": "التسوية"
+    "adjustmentRef": "التسوية",
+    "tabAccounts": "الحسابات",
+    "tabJournal": "السجل",
+    "otherOperations": "عمليات أخرى (الرصيد الافتتاحي، تحويل، دخول آخر)"
   },
   "accountKind": {
     "cash": "صندوق",
@@ -750,12 +762,14 @@
     "newAccount": "حساب جديد",
     "defaultAccount": "الافتراضي",
     "categories": "أصناف المنتوجات",
-    "categoriesHelp": "حرف العمال وأصناف السلع. زيد هنا المنتوجات الجديدة.",
+    "categoriesHelp": "منتوجات الورشة. دابا غير النحاس اللي مفعل؛ فعّل «البلغة» ولا زيد صنف ملي تبدا الورشة تصنعو.",
     "newCategory": "صنف جديد",
     "builtIn": "مدمج",
     "audit": "سجل المراقبة",
     "auditHelp": "شكون زاد ولا بدل شنو، وإمتى.",
-    "auditTable": "الجدول"
+    "auditTable": "الجدول",
+    "disableCategory": "وقف",
+    "enableCategory": "فعّل"
   },
   "permissions": {
     "workers_manage": "تسيير العمال",
@@ -847,5 +861,22 @@
     "title": "وقع مشكل",
     "help": "ما تبدل والو. عاود جرب؛ إلا بقا المشكل، كتب الوقت وتواصل مع الشخص اللي كيسير التطبيق.",
     "retry": "عاود جرب"
+  },
+  "home": {
+    "figures": "باختصار",
+    "cash": "الفلوس الموجودة",
+    "toPayWorkers": "خاص يتخلصو العمال",
+    "thisWeek": "هاد السيمانة",
+    "customersOwe": "الزبناء كيتسالو",
+    "lateOrders": "طلبيات متأخرة",
+    "todo": "خاص يتدار",
+    "nothingToDo": "ما كاين والو مستعجل: كلشي مزيان.",
+    "todoLate": "{count} طلبية متأخرة",
+    "todoReady": "{reference} ({customer}) واجدة للتسليم",
+    "toCollect": "باقي يتخلص",
+    "todoPay": "خلاص السيمانة اللي باقي:",
+    "todoDue": "{reference} ({customer}) خاصها تتسلم نهار {date}",
+    "moreFigures": "أرقام أخرى",
+    "moreFiguresHelp": "الداخل، الخارج، المبيعات والمصاريف فمدة"
   }
 }

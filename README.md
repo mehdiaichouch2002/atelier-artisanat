@@ -7,17 +7,27 @@ receipts. French (default), **Moroccan Arabic (right-to-left)**, English and Spa
 
 It is a management tool, not an e-commerce site, ERP or certified accounting/payroll software.
 
-| Dashboard | Weekly pay | Order |
+| Home | Weekly pay | New order |
 |---|---|---|
-| ![Dashboard](docs/screenshots/dashboard.png) | ![Weekly pay](docs/screenshots/weekly-payroll.png) | ![Order](docs/screenshots/order.png) |
+| ![Home](docs/screenshots/home.png) | ![Weekly pay](docs/screenshots/weekly-payroll.png) | ![New order](docs/screenshots/new-order.png) |
 
-| Msrouf on a phone | Arabic (RTL) on a phone | Orders board |
+| Msrouf on a phone | Arabic (RTL) on a phone | Cash |
 |---|---|---|
-| ![Msrouf](docs/screenshots/msrouf-mobile.png) | ![Arabic](docs/screenshots/payroll-arabic-mobile.png) | ![Board](docs/screenshots/orders-board.png) |
+| ![Msrouf](docs/screenshots/msrouf-mobile.png) | ![Arabic](docs/screenshots/payroll-arabic-mobile.png) | ![Cash](docs/screenshots/cash.png) |
 
 *(Screenshots use fictional demo data.)*
 
 ## Features
+
+**Designed to stay simple.** The home screen has big buttons for daily tasks (give a msrouf, pay the week,
+collect from a customer, new order, new expense), four key numbers and a short "À faire" list. Forms show only
+the essential fields; dates, accounts, payment methods and other details are pre-filled and folded under
+"Plus d'options". Lists show a search box, with filters folded away. Rarely used owner tools (opening balance,
+transfers, other income) are grouped under "Autres opérations" in Caisse.
+
+**Products are configurable.** The workshop starts with **Cuivre / dinanderie** only. Babouches (built in) can
+be switched on, and new categories added, in **Réglages → Catégories de produits**, with no code change. When
+only one category is active, the category fields disappear from the forms.
 
 - **Dashboard**: cash in bank/boxes, what customers owe, what is owed to workers, orders by stage, overdue
   orders, period figures (today / week / month / custom) that link to the detailed lists; cash movement, recorded
@@ -116,15 +126,17 @@ npm run db:migrate
 
 Expected output ends with `migrations up to date`. Running it again is safe.
 
-### 4. Create a login (same terminal window)
+### 4. Create a login and starting data (same terminal window)
 
-- **Demo data** (fictional workers, orders and payments; only on an empty database):
+- **Simple starting data (recommended): 5 copperwork workers, nothing paid.** `npm run db:seed` creates 5
+  workers (Ahmed, Youssef, Mustapha, Rachid, Hamid; weekly pay 1 200–1 500 DH, editable) with **no msrouf, no
+  payments, no orders and no expenses**. With `DEMO_PASSWORD` it also creates the demo logins:
   ```powershell
   $env:DEMO_PASSWORD="demo-password-123"      # bash: export DEMO_PASSWORD='demo-password-123'
   npm run db:seed
   ```
-  Expected: `Demo data created.` Logins: **`demo.owner@example.com`** (owner) and
-  **`demo.manager@example.com`** (manager), both with your `DEMO_PASSWORD`.
+  Expected: `5 copper workers created (weekly pay, no money movements).` Logins: **`demo.owner@example.com`**
+  (owner) and **`demo.manager@example.com`** (manager), both with your `DEMO_PASSWORD`.
 - **Your own owner account** (asks for a password of 10+ characters):
   ```powershell
   $env:OWNER_EMAIL="you@example.com"
@@ -132,7 +144,12 @@ Expected output ends with `migrations up to date`. Running it again is safe.
   npm run db:create-owner
   ```
   Expected: `owner ready: you@example.com`. Running it again with the same e-mail **resets that password**,
-  which helps if you forget it.
+  which helps if you forget it. `npm run db:seed` without `DEMO_PASSWORD` then adds the 5 workers to your account.
+- **Start again from a clean workshop:** `npm run db:reset` erases all workers, msrouf, payments, orders,
+  customers, expenses and cash movements. It keeps user accounts and settings, and asks you to type
+  `EFFACER` first. Then run `npm run db:seed` again. Use it only on test data or before real use.
+- **Rich demo** (several weeks of history, orders, expenses, babouches + cuivre): `npm run db:seed:full`, on an
+  empty database only.
 
 More users (e.g. a manager) are added in the app under **Réglages → Utilisateurs**.
 
@@ -207,7 +224,7 @@ database refuses edits and deletions, and corrections are made with **Annuler ce
 | `password authentication failed for user "atelier_app"` | The password in `.env.local` differs from `APP_DB_PASSWORD`. Run step 3 again with the right one; it only resets that password. |
 | `unrecognized configuration parameter "channel_binding"` | Remove `&channel_binding=require` from the address. |
 | `permission denied to create role` | Step 3 must use the database owner (`neondb_owner` / `postgres`), not `atelier_app`. |
-| `The database already contains data` (seed) | The demo seed only runs on an empty database. Use `db:create-owner` instead, or start from a fresh database. |
+| `Workers already exist` / `The database already contains data` (seed) | Seeds only run on an empty workshop: run `npm run db:reset` first (erases business data). |
 | `DATABASE_URL is not set` when starting the app | `.env.local` is missing, misnamed (`.env.local.txt`) or saved with a byte-order mark; recreate it as in step 5. |
 | Sign-in refused | No account yet (do step 4) or wrong password (re-run `db:create-owner` with the same e-mail). |
 | `Trop de tentatives` | 5 failed sign-ins in 15 minutes; wait 15 minutes. |
@@ -221,7 +238,8 @@ database refuses edits and deletions, and corrections are made with **Annuler ce
 | `npm run test:unit` · `npm run test:integration` · `npm test` | Vitest (integration needs PostgreSQL) |
 | `npm run test:e2e` | Playwright scenarios A–F (after `npm run build`) |
 | `npm run i18n:check` | Every text exists in fr / ar / en / es with the same placeholders |
-| `npm run db:migrate` · `npm run db:create-owner` · `npm run db:seed` | Database scripts |
+| `npm run db:migrate` · `npm run db:create-owner` | Create/update the schema · create or reset an owner login |
+| `npm run db:seed` · `npm run db:reset` · `npm run db:seed:full` | 5 copper workers with no money · erase business data (asks to confirm) · rich demo history |
 
 ## Documentation
 

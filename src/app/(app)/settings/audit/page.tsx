@@ -30,7 +30,7 @@ export default async function AuditPage({ searchParams }: { searchParams: Search
     <>
       <PageHeader title={t("settings.audit")} description={t("settings.auditHelp")} back={<Link href="/settings" className="text-primary hover:underline">← {t("nav.settings")}</Link>} />
       <Card>
-        <FilterBar action="/settings/audit" t={t} resetHref="/settings/audit">
+        <FilterBar action="/settings/audit" t={t} resetHref="/settings/audit" active={Boolean(table)}>
           <FilterField label={t("settings.auditTable")}>
             <select name="table" defaultValue={table ?? ""} className={filterInputClass}>
               <option value="">{t("common.all")}</option>

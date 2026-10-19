@@ -17,7 +17,8 @@
     "expenses": "Expenses",
     "cash": "Cash",
     "reports": "Reports",
-    "settings": "Settings"
+    "settings": "Settings",
+    "manage": "Manage"
   },
   "quick": {
     "title": "Quick entry",
@@ -62,7 +63,8 @@
     "searchPlaceholder": "Type to search…",
     "seeAll": "See all",
     "skipToContent": "Skip to content",
-    "sortBy": "Sort by"
+    "sortBy": "Sort by",
+    "filters": "Filters"
   },
   "auth": {
     "signIn": "Sign in",
@@ -337,7 +339,8 @@
     "advancesThisWeek": "This week's msrouf",
     "paymentsThisWeek": "This week's payments",
     "noPayments": "No payments for this week",
-    "pendingAdvances": "Msrouf to deduct (pay not confirmed)"
+    "pendingAdvances": "Msrouf to deduct (pay not confirmed)",
+    "alreadyGiven": "Already given this week"
   },
   "weekStatus": {
     "empty": "Nothing",
@@ -372,7 +375,11 @@
     "businessAdvances": "Money for workshop purchases",
     "businessHelp": "Counted as expenses, never deducted from pay.",
     "totalCashOut": "Total paid out",
-    "empty": "No msrouf in this period"
+    "empty": "No msrouf in this period",
+    "whoReceives": "Who receives the money?",
+    "quickAmounts": "Pick a quick amount",
+    "whatFor": "What is it for?",
+    "notePlaceholder": "E.g. lunch, transport…"
   },
   "advanceCategory": {
     "daily": "Daily advance",
@@ -384,7 +391,7 @@
     "wage": "Wage advance",
     "wageHelp": "Will be deducted from the week's pay.",
     "business": "Workshop expense",
-    "businessHelp": "Money for the workshop (e.g. buying leather). Does not reduce pay."
+    "businessHelp": "Money for the workshop (e.g. buying copper). Does not reduce pay."
   },
   "orders": {
     "description": "Customer orders, from negotiation to delivery.",
@@ -409,7 +416,7 @@
     "newCustomerInline": "+ New customer",
     "pickExistingCustomer": "Choose an existing customer",
     "lines": "Items",
-    "linePlaceholder": "E.g. Yellow leather babouches, size 42",
+    "linePlaceholder": "E.g. Chased copper tray 60 cm",
     "addLine": "Add item",
     "removeLine": "Remove item {n}",
     "linesLocked": "Production has started: the price is no longer edited here. Use a documented discount or surcharge on the order.",
@@ -452,7 +459,9 @@
     "noAttachments": "No documents",
     "upload": "Add",
     "attachmentSaved": "Document added.",
-    "quickPaymentHelp": "Choose the order and enter the amount received."
+    "quickPaymentHelp": "Choose the order and enter the amount received.",
+    "customerAndDelivery": "Customer and delivery",
+    "depositAccount": "Account for the deposit"
   },
   "orderStatus": {
     "quote": "Quote / to confirm",
@@ -572,7 +581,10 @@
     "counted": "Counted",
     "difference": "Difference",
     "matches": "Matches",
-    "adjustmentRef": "Adjustment"
+    "adjustmentRef": "Adjustment",
+    "tabAccounts": "Accounts",
+    "tabJournal": "Journal",
+    "otherOperations": "Other operations (opening balance, transfer, other income)"
   },
   "accountKind": {
     "cash": "Cash box",
@@ -750,12 +762,14 @@
     "newAccount": "New account",
     "defaultAccount": "Default",
     "categories": "Product categories",
-    "categoriesHelp": "Worker crafts and item categories. Add new products here.",
+    "categoriesHelp": "The workshop's products. Only copper is active for now; enable \"Babouches\" or add a category when the workshop makes them.",
     "newCategory": "New category",
     "builtIn": "Built-in",
     "audit": "Audit log",
     "auditHelp": "Who created or changed what, and when.",
-    "auditTable": "Table"
+    "auditTable": "Table",
+    "disableCategory": "Disable",
+    "enableCategory": "Enable"
   },
   "permissions": {
     "workers_manage": "Manage workers",
@@ -847,5 +861,22 @@
     "title": "Something went wrong",
     "help": "Nothing was changed. Try again; if the problem continues, note the time and contact the person who manages the app.",
     "retry": "Try again"
+  },
+  "home": {
+    "figures": "At a glance",
+    "cash": "Money available",
+    "toPayWorkers": "To pay workers",
+    "thisWeek": "this week",
+    "customersOwe": "Customers owe",
+    "lateOrders": "Late orders",
+    "todo": "To do",
+    "nothingToDo": "Nothing urgent: everything is up to date.",
+    "todoLate": "{count} order(s) late",
+    "todoReady": "{reference} ({customer}) is ready to deliver",
+    "toCollect": "to collect",
+    "todoPay": "Weekly pay to settle:",
+    "todoDue": "{reference} ({customer}) due on {date}",
+    "moreFigures": "More figures",
+    "moreFiguresHelp": "money in and out, sales and expenses over a period"
   }
 }

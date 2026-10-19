@@ -12,6 +12,7 @@ import { catLabel } from "@/components/labels";
 import { can, MANAGER_PERMISSIONS } from "@/lib/auth/permissions";
 import {
   AccountRowForm,
+  BuiltInCategoryForm,
   CategoryRowForm,
   ChangePasswordForm,
   NewAccountForm,
@@ -124,10 +125,7 @@ export default async function SettingsPage() {
               {data.categories.map((c) => (
                 <li key={c.id} className="px-4 py-3">
                   {c.code ? (
-                    <div className="flex items-center gap-2 text-sm">
-                      <span className="font-medium">{catLabel(c, t)}</span>
-                      <Badge>{t("settings.builtIn")}</Badge>
-                    </div>
+                    <BuiltInCategoryForm id={c.id} name={c.name} label={catLabel(c, t)} active={c.active} />
                   ) : (
                     <CategoryRowForm id={c.id} name={c.name} active={c.active} />
                   )}

@@ -28,6 +28,7 @@ export default async function CustomersPage({ searchParams }: { searchParams: Se
     listCustomers(tx, { search, status, withBalance, sort, limit: PAGE_SIZE, offset: (page - 1) * PAGE_SIZE }),
   );
   const keep = { q: search, status: status === "active" ? undefined : status, balance: withBalance ? "1" : undefined, sort: sort === "name" ? undefined : sort };
+  const filtersActive = Boolean(search || status !== "active" || withBalance || sort !== "name");
   return (
     <>
       <PageHeader
@@ -40,10 +41,7 @@ export default async function CustomersPage({ searchParams }: { searchParams: Se
         }
       />
       <Card>
-        <FilterBar action="/customers" t={t} resetHref="/customers">
-          <FilterField label={t("common.search")} className="grow">
-            <input name="q" defaultValue={search} className={filterInputClass} placeholder={t("customers.searchPlaceholder")} />
-          </FilterField>
+        <FilterBar action="/customers" t={t} resetHref="/customers" search={<input aria-label={t("common.search")} type="search" name="q" defaultValue={search} className={`${filterInputClass} w-full`} placeholder={t("customers.searchPlaceholder")} />} active={filtersActive}>
           <FilterField label={t("fields.status")}>
             <select name="status" defaultValue={status} className={filterInputClass}>
               <option value="active">{t("common.active")}</option>
