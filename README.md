@@ -238,7 +238,7 @@ database refuses edits and deletions, and corrections are made with **Annuler ce
 | `Workers already exist` / `The database already contains data` (seed) | Seeds only run on an empty workshop: run `npm run db:reset` first (erases business data). |
 | `DATABASE_URL is not set` when starting the app | `.env.local` is missing, misnamed (`.env.local.txt`) or saved with a byte-order mark; recreate it as in step 5. |
 | Sign-in refused | No account yet (do step 4) or wrong password (re-run `db:create-owner` with the same e-mail). |
-| `Trop de tentatives` | 5 failed sign-ins in 15 minutes. Wait 15 minutes, or run `npm run db:create-owner` for that e-mail (it resets the password and lifts the lock). |
+| `Trop de tentatives` | 5 failed sign-ins in 15 minutes. Wait 15 minutes, or run `npm run db:create-owner` (it resets that password and lifts all login locks), or run `delete from atelier.login_attempts where not success;` in the database SQL editor. |
 
 ## Commands
 
