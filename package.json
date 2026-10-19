@@ -21,7 +21,8 @@
     "db:seed": "node scripts/seed-demo.mjs",
     "db:create-owner": "node scripts/create-owner.mjs",
     "db:seed:full": "node scripts/seed-demo-full.mjs",
-    "db:reset": "node scripts/reset-data.mjs"
+    "db:reset": "node scripts/reset-data.mjs",
+    "vercel-build": "node scripts/vercel-build.mjs"
   },
   "dependencies": {
     "lucide-react": "^1.59.0",

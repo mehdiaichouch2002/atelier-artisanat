@@ -36,6 +36,28 @@ The app needs **Node.js ≥ 22** and **PostgreSQL ≥ 15** (Supabase works). It 
    use the direct connection (port 5432) or Supabase's session pooler instead. **Verify on the first deploy.**
 5. Deploy a **Preview** first, sign in, run the smoke checks below, then promote to Production.
 
+## Automatic database updates on Vercel (recommended)
+
+`vercel.json` makes Vercel run `npm run vercel-build` (`scripts/vercel-build.mjs`) on every deploy. Before
+building, it applies pending migrations and makes sure the super administrator exists, so **no command has to
+be run from a PC**. Set these once in Vercel → Settings → Environment Variables (Production, type *Sensitive*):
+
+| Name | Value |
+|---|---|
+| `MIGRATION_DATABASE_URL` | owner connection, **direct** address (no `-pooler`), e.g. Neon `neondb_owner` |
+| `SUPER_ADMIN_EMAIL` | the super administrator's e-mail |
+| `SUPER_ADMIN_PASSWORD` | their first password (10+ characters) |
+| `SUPER_ADMIN_NAME` | optional display name |
+
+- The account is created only if it doesn't exist; later deploys keep the password changed in the app.
+  To force a reset (forgotten password), set `SUPER_ADMIN_RESET_PASSWORD=true`, redeploy, sign in, then delete
+  that variable.
+- If a migration fails, the build fails and the previous version stays online.
+- Trade-off: Vercel also exposes these variables to the running app (which never reads them). Keep them
+  *Sensitive* and limited to Production. You can remove `SUPER_ADMIN_PASSWORD` once the account exists.
+- A brand-new database still needs the `atelier_app` password set once (`APP_DB_PASSWORD` with
+  `npm run db:migrate`, see below); the Vercel build never changes it.
+
 ## Neon instead of Supabase
 
 Neon (https://neon.tech) can be used the same way (used for local setup on Windows, where installing PostgreSQL

@@ -240,6 +240,12 @@ database refuses edits and deletions, and corrections are made with **Annuler ce
 | Sign-in refused | No account yet (do step 4) or wrong password (re-run `db:create-owner` with the same e-mail). |
 | `Trop de tentatives` | 5 failed sign-ins in 15 minutes. Wait 15 minutes, or run `npm run db:create-owner` (it resets that password and lifts all login locks), or run `delete from atelier.login_attempts where not success;` in the database SQL editor. |
 
+## Online (Vercel)
+
+Pushing to `main` redeploys automatically. With `MIGRATION_DATABASE_URL`, `SUPER_ADMIN_EMAIL` and
+`SUPER_ADMIN_PASSWORD` set in Vercel, each deploy also updates the database and creates the super administrator
+if missing; no command on a PC is needed. Details: [docs/deployment.md](docs/deployment.md).
+
 ## Commands
 
 | Command | Purpose |
