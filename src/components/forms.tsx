@@ -291,7 +291,8 @@ export function PasswordField({ name, label, hint, required, wrapperClassName, a
   const checkCaps = (e: React.KeyboardEvent<HTMLInputElement>) => setCapsLock(e.getModifierState?.("CapsLock") ?? false);
   return (
     <FieldShell id={id} label={label} hint={hint} error={error} required={required} className={wrapperClassName}>
-      <div className="relative">
+      {/* The password is always typed left to right, so the toggle stays on the right in every language. */}
+      <div className="relative" dir="ltr">
         <input
           id={id}
           name={name}
@@ -304,8 +305,7 @@ export function PasswordField({ name, label, hint, required, wrapperClassName, a
           autoCapitalize="none"
           autoCorrect="off"
           spellCheck={false}
-          dir="ltr"
-          className="field-input pe-12"
+          className="field-input pr-12"
           onKeyDown={checkCaps}
           onKeyUp={checkCaps}
           onBlur={() => setCapsLock(false)}
@@ -316,7 +316,7 @@ export function PasswordField({ name, label, hint, required, wrapperClassName, a
           aria-pressed={visible}
           aria-label={visible ? t("auth.hidePassword") : t("auth.showPassword")}
           title={visible ? t("auth.hidePassword") : t("auth.showPassword")}
-          className="absolute inset-y-0 end-0 flex w-11 items-center justify-center rounded-e-lg text-ink-soft hover:text-ink"
+          className="absolute inset-y-0 right-0 flex w-11 items-center justify-center rounded-r-lg text-ink-soft hover:text-ink"
         >
           {visible ? <EyeOff className="size-5" aria-hidden /> : <Eye className="size-5" aria-hidden />}
         </button>

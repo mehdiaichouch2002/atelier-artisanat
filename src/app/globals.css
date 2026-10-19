@@ -118,6 +118,11 @@
     border-color: var(--color-bad);
     background: #fffafa;
   }
+  /* Edge/IE add their own reveal button, which would sit on top of ours. */
+  .field-input::-ms-reveal,
+  .field-input::-ms-clear {
+    display: none;
+  }
   .field-input:disabled {
     background: var(--color-sunken);
     color: var(--color-ink-soft);
