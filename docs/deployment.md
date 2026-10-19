@@ -38,7 +38,8 @@ The app needs **Node.js ≥ 22** and **PostgreSQL ≥ 15** (Supabase works). It 
 
 ## Neon instead of Supabase
 
-Neon (https://neon.tech) also works and is the setup used for the first local run on Windows:
+Neon (https://neon.tech) can be used the same way (used for local setup on Windows, where installing PostgreSQL
+was blocked by Smart App Control):
 
 - Run `db:migrate`, `db:create-owner` and `db:seed` with the **direct** address (`neondb_owner`, host without
   `-pooler`).
@@ -46,8 +47,8 @@ Neon (https://neon.tech) also works and is the setup used for the first local ru
   and `DATABASE_PREPARE=false`.
 - Remove `&channel_binding=require` from addresses copied from the Neon console; the `postgres` driver does not
   support it.
-- Custom roles created by SQL (`atelier_app`) can log in directly, so there is no pooler-role caveat as with
-  Supabase.
+- Verify on first use that the app can sign in through the pooled address as `atelier_app` (custom role created
+  by SQL). If not, use the direct address in `DATABASE_URL` (keep `DATABASE_PREPARE=false` harmlessly).
 
 ## Self-hosted (VPS)
 
