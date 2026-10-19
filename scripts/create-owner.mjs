@@ -38,6 +38,8 @@ try {
     on conflict (email) do update set password_hash = excluded.password_hash, role = 'owner', active = true
     returning id`;
   await sql`delete from atelier.sessions where user_id = ${u.id}`;
+  // A password reset also lifts a login lock caused by earlier failed attempts.
+  await sql`delete from atelier.login_attempts where email = ${email} and not success`;
   if (process.argv.includes("--super-admin")) {
     await sql.begin(async (tx) => {
       await tx`update atelier.users set is_super_admin = false where is_super_admin and id <> ${u.id}`;
