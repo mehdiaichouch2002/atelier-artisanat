@@ -2,7 +2,8 @@ import "server-only";
 import type { Tx } from "./db";
 import { AppError } from "./errors";
 
-export const MAX_ATTACHMENT_BYTES = 5 * 1024 * 1024;
+// Hosting platforms reject larger requests (Vercel: about 4.5 MB per request), so stay below that.
+export const MAX_ATTACHMENT_BYTES = 4 * 1024 * 1024;
 export const ALLOWED_MIME_TYPES = ["image/jpeg", "image/png", "image/webp", "application/pdf"] as const;
 
 /** Detects the real file type from its first bytes (the browser-provided type is not trusted). */

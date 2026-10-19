@@ -88,7 +88,7 @@
     "amount": "Montant",
     "assignedWorker": "Artisan assigné",
     "attachment": "Pièce jointe",
-    "attachmentHint": "Photo ou PDF, 5 Mo maximum.",
+    "attachmentHint": "Photo ou PDF, 4 Mo maximum.",
     "category": "Catégorie",
     "code": "Code",
     "count": "Nombre",
@@ -828,7 +828,7 @@
       "already_reversed": "ce mouvement est déjà annulé",
       "already_voided": "cette ligne est déjà annulée",
       "reversal_of_reversal": "une annulation ne peut pas être annulée",
-      "file_too_large": "fichier trop lourd (5 Mo maximum)",
+      "file_too_large": "fichier trop lourd (4 Mo maximum)",
       "file_type": "type de fichier non accepté (JPEG, PNG, WebP ou PDF)",
       "week_start_locked": "des semaines de paie existent déjà",
       "self_lockout": "vous ne pouvez pas retirer votre propre accès propriétaire",
@@ -838,7 +838,8 @@
       "pay_week": "date de semaine invalide",
       "no_lines": "ajoutez au moins un article",
       "similar_customer": "un client semblable existe"
-    }
+    },
+    "fileTooLarge": "Le fichier est trop lourd (4 Mo maximum). Prenez une photo plus petite ou réduisez sa taille."
   },
   "validation": {
     "required": "Ce champ est obligatoire.",

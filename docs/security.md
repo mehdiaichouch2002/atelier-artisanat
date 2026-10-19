@@ -40,7 +40,7 @@ Tested in `tests/integration/security.test.ts` (RLS, grants, throttling, session
   `X-Content-Type-Options: nosniff`, a sandboxing `Content-Security-Policy` and `Cache-Control: private, no-store`.
 - **SQL injection**: all queries use parameterised tagged templates; identifiers are never built from input.
 - **IDOR**: every record access goes through RLS as the signed-in user; ids are random UUIDs.
-- **Uploads**: ≤ 5 MB, only JPEG/PNG/WebP/PDF detected from the file's bytes (not the browser's claim), stored
+- **Uploads**: ≤ 4 MB (Vercel refuses requests over ~4.5 MB), only JPEG/PNG/WebP/PDF detected from the file's bytes (not the browser's claim), stored
   privately in the database, filenames sanitised.
 - **CSV injection**: cells starting with `= + - @` are prefixed with `'` (except plain numbers).
 - **Headers**: `X-Frame-Options: DENY`, `Referrer-Policy`, `Permissions-Policy`, HSTS, no `X-Powered-By`.

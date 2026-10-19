@@ -42,7 +42,7 @@ Browser ──(HTML, Server Actions, CSRF-checked by Next.js)──▶ Next.js 1
   functions; integration tests check both agree. Constraints and triggers are first-class.
 - **Own authentication instead of Supabase Auth**: works on any PostgreSQL (local, Supabase, managed), keeps the
   session check inside the same database and RLS model. See `docs/security.md`.
-- **Attachments in the database** (bytea, ≤ 5 MB, type sniffed from content): private by default, served only to
+- **Attachments in the database** (bytea, ≤ 4 MB, type sniffed from content): private by default, served only to
   signed-in members, works on serverless hosting without a writable disk. Suitable for a small workshop.
 - **React Hook Form not used**: React 19 `useActionState` + Zod covers validation, kept input and pending states
   with less client code.

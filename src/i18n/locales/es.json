@@ -88,7 +88,7 @@
     "amount": "Importe",
     "assignedWorker": "Artesano asignado",
     "attachment": "Archivo adjunto",
-    "attachmentHint": "Foto o PDF, 5 MB como máximo.",
+    "attachmentHint": "Foto o PDF, 4 MB como máximo.",
     "category": "Categoría",
     "code": "Código",
     "count": "Número",
@@ -828,7 +828,7 @@
       "already_reversed": "este movimiento ya está anulado",
       "already_voided": "esta línea ya está anulada",
       "reversal_of_reversal": "una anulación no se puede anular",
-      "file_too_large": "archivo demasiado grande (5 MB como máximo)",
+      "file_too_large": "archivo demasiado grande (4 MB como máximo)",
       "file_type": "tipo de archivo no aceptado (JPEG, PNG, WebP o PDF)",
       "week_start_locked": "ya existen semanas de pago",
       "self_lockout": "no puede quitarse su propio acceso de propietario",
@@ -838,7 +838,8 @@
       "pay_week": "fecha de semana no válida",
       "no_lines": "añada al menos un artículo",
       "similar_customer": "existe un cliente parecido"
-    }
+    },
+    "fileTooLarge": "El archivo es demasiado grande (4 MB como máximo). Haga una foto más pequeña o reduzca su tamaño."
   },
   "validation": {
     "required": "Este campo es obligatorio.",

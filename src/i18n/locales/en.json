@@ -88,7 +88,7 @@
     "amount": "Amount",
     "assignedWorker": "Assigned artisan",
     "attachment": "Attachment",
-    "attachmentHint": "Photo or PDF, 5 MB maximum.",
+    "attachmentHint": "Photo or PDF, 4 MB maximum.",
     "category": "Category",
     "code": "Code",
     "count": "Count",
@@ -828,7 +828,7 @@
       "already_reversed": "this movement is already reversed",
       "already_voided": "this line is already voided",
       "reversal_of_reversal": "a reversal cannot be reversed",
-      "file_too_large": "file too large (5 MB maximum)",
+      "file_too_large": "file too large (4 MB maximum)",
       "file_type": "file type not accepted (JPEG, PNG, WebP or PDF)",
       "week_start_locked": "pay weeks already exist",
       "self_lockout": "you cannot remove your own owner access",
@@ -838,7 +838,8 @@
       "pay_week": "invalid week date",
       "no_lines": "add at least one item",
       "similar_customer": "a similar customer exists"
-    }
+    },
+    "fileTooLarge": "The file is too large (4 MB maximum). Take a smaller photo or reduce its size."
   },
   "validation": {
     "required": "This field is required.",

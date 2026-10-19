@@ -13,6 +13,9 @@ import { Notice } from "./ui/card";
 type FormCtx = { state: ActionState; pending: boolean };
 const FormContext = createContext<FormCtx>({ state: {}, pending: false });
 
+/** Same limit as MAX_ATTACHMENT_BYTES on the server (kept here to avoid importing server code). */
+const MAX_UPLOAD_BYTES = 4 * 1024 * 1024;
+
 function newKey(): string {
   if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") return crypto.randomUUID();
   const b = new Uint8Array(16);
@@ -50,6 +53,8 @@ export function ActionForm({
   const [state, formAction, pending] = useActionState(action, {});
   const keyRef = useRef<HTMLInputElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
+  const [fileTooLarge, setFileTooLarge] = useState(false);
+  const { t } = useI18n();
   const router = useRouter();
   const handled = useRef<ActionState | null>(null);
 
@@ -76,7 +81,16 @@ export function ActionForm({
       <form
         ref={formRef}
         action={formAction}
-        onSubmit={() => {
+        onSubmit={(e) => {
+          // Refuse oversized files before uploading: the host would reject the request with a generic error.
+          const big = [...e.currentTarget.querySelectorAll<HTMLInputElement>('input[type="file"]')].some((input) =>
+            [...(input.files ?? [])].some((f) => f.size > MAX_UPLOAD_BYTES),
+          );
+          setFileTooLarge(big);
+          if (big) {
+            e.preventDefault();
+            return;
+          }
           // One key per logical operation: a repeated or retried submission reuses it.
           if (keyRef.current && !keyRef.current.value) keyRef.current.value = newKey();
         }}
@@ -87,6 +101,11 @@ export function ActionForm({
         aria-busy={pending}
       >
         <input type="hidden" name="idempotencyKey" ref={keyRef} defaultValue="" />
+        {fileTooLarge ? (
+          <div className="mb-4">
+            <Notice tone="bad">{t("errors.fileTooLarge")}</Notice>
+          </div>
+        ) : null}
         <FormMessage showSuccess={showSuccess} />
         {children}
       </form>
