@@ -47,8 +47,10 @@ was blocked by Smart App Control):
   and `DATABASE_PREPARE=false`.
 - Remove `&channel_binding=require` from addresses copied from the Neon console; the `postgres` driver does not
   support it.
-- Verify on first use that the app can sign in through the pooled address as `atelier_app` (custom role created
-  by SQL). If not, use the direct address in `DATABASE_URL` (keep `DATABASE_PREPARE=false` harmlessly).
+- Verified: the app connects through Neon's pooled address as the custom role `atelier_app`
+  (with `DATABASE_PREPARE=false`).
+- Pick a region close to the users (e.g. Europe/Frankfurt for Morocco): every page makes several database round
+  trips, so a distant region (e.g. US East) makes pages noticeably slower.
 
 ## Self-hosted (VPS)
 
