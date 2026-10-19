@@ -37,7 +37,11 @@ tooling only (not shipped to the server or browser). The fix requires a breaking
   3. Create a Vercel project from this repository, set `DATABASE_URL` (role `atelier_app`), `DATABASE_SSL=true`,
      `DATABASE_PREPARE=false`, `DATABASE_POOL_MAX=1`; deploy a preview, run the smoke test, promote.
   4. Verify that the Supabase pooler accepts the custom role (else use the direct/session connection).
-- CI workflow is committed but its first run on GitHub has not been observed from this session.
+- **GitHub Actions does not start**: CI run #1 (and its re-run) on commit `c46944c` failed in 3–4 seconds with
+  no runner assigned, no steps executed and no logs. That pattern points to an account-level setting (Actions
+  disabled for the repository/account, or a billing / spending-limit problem), not to the code; the same checks
+  pass locally. Action needed: GitHub → repository *Settings → Actions → General* (allow actions) and account
+  *Settings → Billing and plans* (payment method / spending limit), then re-run the workflow.
 - Supabase Auth is not used (own auth on PostgreSQL); a deliberate choice, see `docs/architecture.md`.
 
 ## Limitations and deferred features
