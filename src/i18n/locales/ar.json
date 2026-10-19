@@ -73,7 +73,10 @@
     "password": "كلمة السر",
     "invalidCredentials": "البريد الإلكتروني أو كلمة السر غير صحيحة.",
     "throttled": "محاولات كثيرة. عاود من بعد 15 دقيقة.",
-    "wrongPassword": "كلمة السر الحالية غير صحيحة."
+    "wrongPassword": "كلمة السر الحالية غير صحيحة.",
+    "showPassword": "بيّن كلمة السر",
+    "hidePassword": "خبّي كلمة السر",
+    "capsLockOn": "انتباه: الحروف الكبيرة (Caps Lock) مفعلة."
   },
   "roles": {
     "owner": "مول الورشة",

@@ -244,7 +244,9 @@ database refuses edits and deletions, and corrections are made with **Annuler ce
 
 Pushing to `main` redeploys automatically. With `MIGRATION_DATABASE_URL`, `SUPER_ADMIN_EMAIL` and
 `SUPER_ADMIN_PASSWORD` set in Vercel, each deploy also updates the database and creates the super administrator
-if missing; no command on a PC is needed. Details: [docs/deployment.md](docs/deployment.md).
+if missing; no command on a PC is needed. To empty the live database before real use, set
+`PRODUCTION_RESET_TOKEN` (any new value) and redeploy once; it runs only once per value.
+Details: [docs/deployment.md](docs/deployment.md).
 
 ## Commands
 

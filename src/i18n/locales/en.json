@@ -73,7 +73,10 @@
     "password": "Password",
     "invalidCredentials": "Incorrect email or password.",
     "throttled": "Too many attempts. Try again in 15 minutes.",
-    "wrongPassword": "Current password is incorrect."
+    "wrongPassword": "Current password is incorrect.",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "capsLockOn": "Caps Lock is on."
   },
   "roles": {
     "owner": "Owner",

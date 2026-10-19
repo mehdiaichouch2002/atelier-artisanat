@@ -1,5 +1,5 @@
 "use client";
-import { ActionForm, CheckboxField, SelectField, SubmitButton, TextField } from "@/components/forms";
+import { ActionForm, CheckboxField, PasswordField, SelectField, SubmitButton, TextField } from "@/components/forms";
 import { useI18n } from "@/i18n/client";
 import {
   changeOwnPasswordAction,
@@ -108,7 +108,7 @@ export function NewUserForm() {
   return (
     <ActionForm action={createUserAction} className="grid gap-4 sm:grid-cols-2">
       <TextField name="displayName" label={t("fields.name")} required />
-      <TextField name="email" type="email" label={t("auth.email")} required dir="ltr" autoComplete="off" />
+      <TextField name="email" type="email" label={t("auth.email")} required dir="ltr" autoComplete="off" autoCapitalize="none" spellCheck={false} inputMode="email" />
       <SelectField
         name="role"
         label={t("settings.role")}
@@ -119,7 +119,7 @@ export function NewUserForm() {
           { value: "owner", label: t("roles.owner") },
         ]}
       />
-      <TextField name="password" type="password" label={t("settings.initialPassword")} required autoComplete="new-password" hint={t("settings.passwordHint")} dir="ltr" />
+      <PasswordField name="password" label={t("settings.initialPassword")} required autoComplete="new-password" hint={t("settings.passwordHint")} />
       <div className="sm:col-span-2">
         <SubmitButton>{t("settings.createUser")}</SubmitButton>
       </div>
@@ -154,7 +154,7 @@ export function ResetPasswordForm({ id }: { id: string }) {
   return (
     <ActionForm action={resetPasswordAction} className="space-y-3">
       <input type="hidden" name="id" value={id} />
-      <TextField name="password" type="password" label={t("settings.newPassword")} required autoComplete="new-password" hint={t("settings.passwordHint")} dir="ltr" />
+      <PasswordField name="password" label={t("settings.newPassword")} required autoComplete="new-password" hint={t("settings.passwordHint")} />
       <SubmitButton>{t("settings.resetPassword")}</SubmitButton>
     </ActionForm>
   );
@@ -164,9 +164,9 @@ export function ChangePasswordForm() {
   const { t } = useI18n();
   return (
     <ActionForm action={changeOwnPasswordAction} className="grid gap-4 sm:grid-cols-3">
-      <TextField name="current" type="password" label={t("settings.currentPassword")} required autoComplete="current-password" dir="ltr" />
-      <TextField name="password" type="password" label={t("settings.newPassword")} required autoComplete="new-password" hint={t("settings.passwordHint")} dir="ltr" />
-      <TextField name="confirm" type="password" label={t("settings.confirmPassword")} required autoComplete="new-password" dir="ltr" />
+      <PasswordField name="current" label={t("settings.currentPassword")} required autoComplete="current-password" />
+      <PasswordField name="password" label={t("settings.newPassword")} required autoComplete="new-password" hint={t("settings.passwordHint")} />
+      <PasswordField name="confirm" label={t("settings.confirmPassword")} required autoComplete="new-password" />
       <div className="sm:col-span-3">
         <SubmitButton variant="secondary">{t("settings.changePassword")}</SubmitButton>
       </div>

@@ -53,6 +53,12 @@ be run from a PC**. Set these once in Vercel → Settings → Environment Variab
   To force a reset (forgotten password), set `SUPER_ADMIN_RESET_PASSWORD=true`, redeploy, sign in, then delete
   that variable.
 - If a migration fails, the build fails and the previous version stays online.
+- **One-time production clean-up** before real use: add `PRODUCTION_RESET_TOKEN` with any new value (e.g.
+  `clean-2026-10-19`) and redeploy. The build erases all business data (workers, msrouf, pay, customers,
+  orders, payments, expenses, cash movements, audit log) and the demo accounts, keeps the super administrator,
+  other real users, settings and categories, and records the token in `atelier.maintenance_runs`. The same
+  token never runs again, so leaving the variable set is harmless; delete it afterwards to keep things tidy.
+  The build log shows `production clean-up "…" done`.
 - Trade-off: Vercel also exposes these variables to the running app (which never reads them). Keep them
   *Sensitive* and limited to Production. You can remove `SUPER_ADMIN_PASSWORD` once the account exists.
 - A brand-new database still needs the `atelier_app` password set once (`APP_DB_PASSWORD` with

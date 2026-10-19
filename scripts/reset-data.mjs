@@ -5,6 +5,7 @@
 //   MIGRATION_DATABASE_URL=... npm run db:reset -- --yes   (no question, for scripts)
 import readline from "node:readline";
 import postgres from "postgres";
+import { eraseBusinessData } from "./reset-lib.mjs";
 
 const url = process.env.MIGRATION_DATABASE_URL;
 if (!url) {
@@ -29,28 +30,9 @@ if (!process.argv.includes("--yes")) {
   }
 }
 
-const GUARDED = [
-  ["ledger_entries", "ledger_immutable"],
-  ["worker_earnings", "worker_earnings_guard"],
-  ["order_adjustments", "order_adjustments_immutable"],
-  ["order_status_history", "order_status_history_immutable"],
-  ["cash_counts", "cash_counts_immutable"],
-  ["order_lines", "order_lines_guard"],
-];
-
 const sql = postgres(url, { max: 1, onnotice: () => {} });
 try {
-  await sql.begin(async (tx) => {
-    for (const [table, trigger] of GUARDED) await tx.unsafe(`alter table atelier.${table} disable trigger ${trigger}`);
-    await tx.unsafe(`
-      truncate atelier.attachments, atelier.ledger_entries, atelier.cash_counts, atelier.order_adjustments,
-        atelier.order_status_history, atelier.order_lines, atelier.orders, atelier.customers,
-        atelier.worker_earnings, atelier.worker_arrangements, atelier.workers, atelier.counters, atelier.audit_log;
-      delete from atelier.cash_accounts where not is_default;
-      delete from atelier.sessions where expires_at < now();
-    `);
-    for (const [table, trigger] of GUARDED) await tx.unsafe(`alter table atelier.${table} enable trigger ${trigger}`);
-  });
+  await sql.begin((tx) => eraseBusinessData(tx));
   console.log("All business data erased. User accounts and settings were kept.");
 } catch (e) {
   console.error("reset failed, nothing was changed:", e.message);

@@ -3,6 +3,7 @@
 import { createContext, useActionState, useContext, useEffect, useId, useMemo, useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { useRouter } from "next/navigation";
+import { Eye, EyeOff } from "lucide-react";
 import { useI18n } from "@/i18n/client";
 import type { ActionState } from "@/lib/action";
 import { Button, buttonClass } from "./ui/button";
@@ -48,6 +49,7 @@ export function ActionForm({
 }) {
   const [state, formAction, pending] = useActionState(action, {});
   const keyRef = useRef<HTMLInputElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
   const router = useRouter();
   const handled = useRef<ActionState | null>(null);
 
@@ -60,6 +62,11 @@ export function ActionForm({
       onSuccess?.(state);
       const target = (state.data?.redirect as string | undefined) ?? successRedirect;
       if (target) router.push(target);
+    } else if (state.error && formRef.current) {
+      // Take the user straight to the problem: the first invalid field, otherwise the error message.
+      const invalid = formRef.current.querySelector<HTMLElement>('[aria-invalid="true"]');
+      if (invalid) invalid.focus();
+      else formRef.current.querySelector<HTMLElement>('[role="alert"]')?.scrollIntoView({ block: "center" });
     }
   }, [state, onSuccess, router, successRedirect]);
 
@@ -67,6 +74,7 @@ export function ActionForm({
   return (
     <FormContext.Provider value={ctx}>
       <form
+        ref={formRef}
         action={formAction}
         onSubmit={() => {
           // One key per logical operation: a repeated or retried submission reuses it.
@@ -239,6 +247,66 @@ export function TextField({ name, label, hint, defaultValue, required, wrapperCl
           </span>
         ) : null}
       </div>
+    </FieldShell>
+  );
+}
+
+/**
+ * Password input with a show/hide button and a Caps Lock warning. Typed passwords are never sent back
+ * to the browser after an error, so the field is always empty when the page re-renders.
+ */
+export function PasswordField({ name, label, hint, required, wrapperClassName, autoComplete }: {
+  name: string;
+  label: React.ReactNode;
+  hint?: React.ReactNode;
+  required?: boolean;
+  wrapperClassName?: string;
+  autoComplete: "current-password" | "new-password";
+}) {
+  const id = useId();
+  const { t } = useI18n();
+  const { error } = useField(name, null);
+  const [visible, setVisible] = useState(false);
+  const [capsLock, setCapsLock] = useState(false);
+  const describedBy = [error ? `${id}-error` : hint ? `${id}-hint` : null, capsLock ? `${id}-caps` : null].filter(Boolean).join(" ") || undefined;
+  const checkCaps = (e: React.KeyboardEvent<HTMLInputElement>) => setCapsLock(e.getModifierState?.("CapsLock") ?? false);
+  return (
+    <FieldShell id={id} label={label} hint={hint} error={error} required={required} className={wrapperClassName}>
+      <div className="relative">
+        <input
+          id={id}
+          name={name}
+          type={visible ? "text" : "password"}
+          required={required}
+          aria-required={required}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={describedBy}
+          autoComplete={autoComplete}
+          autoCapitalize="none"
+          autoCorrect="off"
+          spellCheck={false}
+          dir="ltr"
+          className="field-input pe-12"
+          onKeyDown={checkCaps}
+          onKeyUp={checkCaps}
+          onBlur={() => setCapsLock(false)}
+        />
+        <button
+          type="button"
+          onClick={() => setVisible((v) => !v)}
+          aria-pressed={visible}
+          aria-label={visible ? t("auth.hidePassword") : t("auth.showPassword")}
+          title={visible ? t("auth.hidePassword") : t("auth.showPassword")}
+          className="absolute inset-y-0 end-0 flex w-11 items-center justify-center rounded-e-lg text-ink-soft hover:text-ink"
+        >
+          {visible ? <EyeOff className="size-5" aria-hidden /> : <Eye className="size-5" aria-hidden />}
+        </button>
+      </div>
+      {capsLock ? (
+        <p id={`${id}-caps`} role="status" className="mt-1 text-sm font-medium text-warn">
+          {t("auth.capsLockOn")}
+        </p>
+      ) : null}
     </FieldShell>
   );
 }

@@ -73,7 +73,10 @@
     "password": "Contraseña",
     "invalidCredentials": "Correo o contraseña incorrectos.",
     "throttled": "Demasiados intentos. Inténtelo de nuevo en 15 minutos.",
-    "wrongPassword": "La contraseña actual es incorrecta."
+    "wrongPassword": "La contraseña actual es incorrecta.",
+    "showPassword": "Mostrar la contraseña",
+    "hidePassword": "Ocultar la contraseña",
+    "capsLockOn": "Atención: el bloqueo de mayúsculas está activado."
   },
   "roles": {
     "owner": "Propietario",

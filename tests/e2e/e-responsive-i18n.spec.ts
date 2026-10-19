@@ -85,3 +85,17 @@ test("language switcher changes the interface", async ({ page }) => {
   await expect(page.locator("html")).toHaveAttribute("lang", "es");
   await expect(page.getByRole("link", { name: "Trabajadores" }).first()).toBeVisible();
 });
+
+test("password fields can be shown and hidden; login focuses the e-mail field", async ({ page }) => {
+  await setLocale(page, "fr");
+  await page.goto("/login");
+  await expect(page.locator('input[name="email"]')).toBeFocused();
+  const pw = page.locator('input[name="password"]');
+  await pw.fill("secret-value");
+  await expect(pw).toHaveAttribute("type", "password");
+  await page.getByRole("button", { name: "Afficher le mot de passe" }).click();
+  await expect(pw).toHaveAttribute("type", "text");
+  await page.getByRole("button", { name: "Masquer le mot de passe" }).click();
+  await expect(pw).toHaveAttribute("type", "password");
+  // The Caps Lock warning cannot be exercised here: headless Chromium does not report Caps Lock state.
+});

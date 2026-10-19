@@ -73,7 +73,10 @@
     "password": "Mot de passe",
     "invalidCredentials": "E-mail ou mot de passe incorrect.",
     "throttled": "Trop de tentatives. Réessayez dans 15 minutes.",
-    "wrongPassword": "Mot de passe actuel incorrect."
+    "wrongPassword": "Mot de passe actuel incorrect.",
+    "showPassword": "Afficher le mot de passe",
+    "hidePassword": "Masquer le mot de passe",
+    "capsLockOn": "Attention : la touche Majuscules (Verr. Maj) est activée."
   },
   "roles": {
     "owner": "Propriétaire",
