@@ -47,22 +47,170 @@ GitHub Actions.
 
 ## Run locally
 
-Requirements: Node.js 22+, PostgreSQL 15+.
+You need **Node.js 22+**, **Git** and a **PostgreSQL 15+ database**. The database can be on your PC, or a free
+online one (Neon or Supabase). The app works the same with either.
+
+> **No account exists out of the box.** You create the first login yourself (step 4): either the demo accounts
+> or your own owner account.
+
+### 1. Get the code
 
 ```bash
+git clone https://github.com/mehdiaichouch2002/atelier-artisanat.git
+cd atelier-artisanat
 npm ci
-createdb atelier_dev
-cp .env.example .env.local          # then fill in real local values
-# Apply migrations (creates schema `atelier` and the restricted role `atelier_app`)
-MIGRATION_DATABASE_URL=postgres://postgres:<pw>@localhost:5432/atelier_dev APP_DB_PASSWORD=<app pw> npm run db:migrate
-# Either create your owner account…
-MIGRATION_DATABASE_URL=… OWNER_EMAIL=you@example.com OWNER_NAME="Votre nom" npm run db:create-owner
-# …or load fictional demo data (dev only; logins demo.owner@example.com / demo.manager@example.com)
-MIGRATION_DATABASE_URL=… DEMO_PASSWORD=<at least 10 chars> npm run db:seed
-npm run dev                          # http://localhost:3000
 ```
 
-`.env.local` needs at least `DATABASE_URL=postgres://atelier_app:<app pw>@localhost:5432/atelier_dev`.
+`npm ci` may print warnings: `eslint … deprecated`, `5 high severity vulnerabilities` and
+`unrs-resolver … install scripts`. They come from developer tools (lint/tests), not from the app. Do **not**
+run `npm audit fix --force`.
+
+### 2. Get a database: pick one
+
+**Option A: free online database on Neon (easiest on Windows, nothing to install)**
+
+1. Sign up at https://neon.tech and create a project (pick a region near you, e.g. Europe/Frankfurt).
+2. In the project, open **Connect**, role `neondb_owner`, database `neondb`. You need two addresses:
+   - the **direct** address: switch **Connection pooling off**, so the host has **no** `-pooler`. Used for
+     setup (step 3).
+   - the **pooled** address: switch **Connection pooling on**, so the host contains `-pooler`. Used by the
+     app (step 5).
+3. Copy with the copy button (the screen shows `****` instead of the password).
+4. **Delete `&channel_binding=require`** from the end of the copied address. The app's database driver does not
+   support that option. The address must end with `?sslmode=require`.
+5. Never paste these addresses (they contain passwords) into chats, issues or commits. If one leaks, use
+   **Reset password** on the role in Neon.
+
+You do not need to create a database: Neon already provides `neondb`.
+
+**Option B: PostgreSQL on your PC**
+
+- Windows/macOS installer: https://www.postgresql.org/download/; Homebrew: `brew install postgresql@16`;
+  Ubuntu: `sudo apt install postgresql`.
+- Create the database: `psql -U postgres -c "create database atelier_dev"`.
+- Your setup address is then `postgres://postgres:<postgres password>@localhost:5432/atelier_dev`.
+- On Windows, if `psql` is "not recognised", use
+  `& "C:\Program Files\PostgreSQL\16\bin\psql.exe" …` or create the database in pgAdmin.
+- On Windows 11, **Smart App Control** may block parts of the PostgreSQL installer. It cannot allow a single
+  program, and turning it off cannot be undone without resetting Windows, so use Option A instead.
+
+### 3. Create the tables (migrations)
+
+This creates the `atelier` schema and a restricted database user **`atelier_app`** that the app connects with.
+Choose its password in `APP_DB_PASSWORD`, using only letters, digits and `-` (characters such as `@ : / #`
+break connection addresses).
+
+macOS / Linux:
+```bash
+export MIGRATION_DATABASE_URL='<direct address from step 2>'
+export APP_DB_PASSWORD='Choose-A-Long-Password-2026'
+npm run db:migrate
+```
+
+Windows PowerShell:
+```powershell
+$env:MIGRATION_DATABASE_URL="<direct address from step 2>"
+$env:APP_DB_PASSWORD="Choose-A-Long-Password-2026"
+npm run db:migrate
+```
+
+Expected output ends with `migrations up to date`. Running it again is safe.
+
+### 4. Create a login (same terminal window)
+
+- **Demo data** (fictional workers, orders and payments; only on an empty database):
+  ```powershell
+  $env:DEMO_PASSWORD="demo-password-123"      # bash: export DEMO_PASSWORD='demo-password-123'
+  npm run db:seed
+  ```
+  Expected: `Demo data created.` Logins: **`demo.owner@example.com`** (owner) and
+  **`demo.manager@example.com`** (manager), both with your `DEMO_PASSWORD`.
+- **Your own owner account** (asks for a password of 10+ characters):
+  ```powershell
+  $env:OWNER_EMAIL="you@example.com"
+  $env:OWNER_NAME="Your name"
+  npm run db:create-owner
+  ```
+  Expected: `owner ready: you@example.com`. Running it again with the same e-mail **resets that password**,
+  which helps if you forget it.
+
+More users (e.g. a manager) are added in the app under **Réglages → Utilisateurs**.
+
+### 5. Configure the app: `.env.local`
+
+Create a file named exactly `.env.local` in the project folder. It is **not** a command, so don't type these
+lines into the terminal. The address is the one from step 2 with the user and password changed to
+`atelier_app` and your `APP_DB_PASSWORD`.
+
+Online database (Neon, pooled address):
+```
+DATABASE_URL=postgresql://atelier_app:<APP_DB_PASSWORD>@<host-with--pooler>/neondb?sslmode=require
+DATABASE_SSL=true
+DATABASE_PREPARE=false
+```
+
+Local database:
+```
+DATABASE_URL=postgres://atelier_app:<APP_DB_PASSWORD>@localhost:5432/atelier_dev
+DATABASE_SSL=false
+```
+
+On Windows, create the file from PowerShell so it is saved without a byte-order mark. Notepad may add one,
+which breaks the first line, or save the file as `.env.local.txt`:
+```powershell
+$lines = @(
+  "DATABASE_URL=postgresql://atelier_app:<APP_DB_PASSWORD>@<host-with--pooler>/neondb?sslmode=require",
+  "DATABASE_SSL=true",
+  "DATABASE_PREPARE=false"
+)
+[IO.File]::WriteAllLines("$PWD\.env.local", $lines, (New-Object Text.UTF8Encoding $false))
+Get-Content .env.local
+```
+
+`.env.local` is git-ignored: it never goes to GitHub. The `npm run db:*` scripts do not read it, which is
+why steps 3–4 set their variables on the command line.
+
+### 6. Start
+
+```bash
+npm run dev            # http://localhost:3000   (another port: npm run dev -- -p 3001)
+```
+
+To run it like production: `npm run build` then `npm start`.
+
+### Look at the data (optional)
+
+- **Neon**: open the project, then **SQL Editor**. If the menu doesn't show it, use the console search
+  (**Ctrl K → "SQL Editor"**) or the `⋮` menu of the compute. Select branch `production`, database `neondb`.
+  The **Tables** view needs schema **`atelier`** (not `public`).
+- **Local**: `psql "<direct address>"`, then `set search_path to atelier;`.
+
+All tables live in the `atelier` schema and amounts are stored in **centimes** (divide by 100):
+
+```sql
+select email, display_name, role, active from atelier.users;
+select name, balance_cents / 100.0 as dh from atelier.v_account_balances;
+select reference, entry_type, direction, amount_cents / 100.0 as dh, occurred_at
+  from atelier.ledger_entries order by occurred_at desc limit 20;
+```
+
+Use the SQL editor for reading only and make changes in the app. Money movements are locked by design: the
+database refuses edits and deletions, and corrections are made with **Annuler ce mouvement**.
+
+### Troubleshooting
+
+| Message | Fix |
+|---|---|
+| Windows: `npm.ps1 … l'exécution de scripts est désactivée` | `Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned`, then reopen PowerShell (or type `npm.cmd` instead of `npm`). |
+| `psql` is not recognised | PostgreSQL is not installed or not on PATH; see step 2. |
+| `password authentication failed for user 'neondb_owner'` / `'postgres'` | Wrong password in `MIGRATION_DATABASE_URL`. Copy it again from Neon (copy button), or reset the role's password. |
+| `password authentication failed for user "atelier_app"` | The password in `.env.local` differs from `APP_DB_PASSWORD`. Run step 3 again with the right one; it only resets that password. |
+| `unrecognized configuration parameter "channel_binding"` | Remove `&channel_binding=require` from the address. |
+| `permission denied to create role` | Step 3 must use the database owner (`neondb_owner` / `postgres`), not `atelier_app`. |
+| `The database already contains data` (seed) | The demo seed only runs on an empty database. Use `db:create-owner` instead, or start from a fresh database. |
+| `DATABASE_URL is not set` when starting the app | `.env.local` is missing, misnamed (`.env.local.txt`) or saved with a byte-order mark; recreate it as in step 5. |
+| Sign-in refused | No account yet (do step 4) or wrong password (re-run `db:create-owner` with the same e-mail). |
+| `Trop de tentatives` | 5 failed sign-ins in 15 minutes; wait 15 minutes. |
 
 ## Commands
 

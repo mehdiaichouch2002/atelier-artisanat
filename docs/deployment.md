@@ -36,6 +36,19 @@ The app needs **Node.js ≥ 22** and **PostgreSQL ≥ 15** (Supabase works). It 
    use the direct connection (port 5432) or Supabase's session pooler instead. **Verify on the first deploy.**
 5. Deploy a **Preview** first, sign in, run the smoke checks below, then promote to Production.
 
+## Neon instead of Supabase
+
+Neon (https://neon.tech) also works and is the setup used for the first local run on Windows:
+
+- Run `db:migrate`, `db:create-owner` and `db:seed` with the **direct** address (`neondb_owner`, host without
+  `-pooler`).
+- Point the app at the **pooled** address (host with `-pooler`) as user `atelier_app`, with `DATABASE_SSL=true`
+  and `DATABASE_PREPARE=false`.
+- Remove `&channel_binding=require` from addresses copied from the Neon console; the `postgres` driver does not
+  support it.
+- Custom roles created by SQL (`atelier_app`) can log in directly, so there is no pooler-role caveat as with
+  Supabase.
+
 ## Self-hosted (VPS)
 
 ```bash
